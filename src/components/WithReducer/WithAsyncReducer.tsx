@@ -1,5 +1,5 @@
 import React from 'react'
-import useAsyncTodos, { ACTION } from './hooks/useAsyncTodos'
+import { ACTION, useAsyncTodos1 as useAsyncTodos } from './hooks/useAsyncTodos'
 import * as Widget from './Common'
 import { TEST_ID } from './Common'
 

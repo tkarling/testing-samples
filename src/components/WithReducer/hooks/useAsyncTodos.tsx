@@ -1,6 +1,6 @@
-import React, { useReducer, useEffect, useCallback, useState } from 'react'
+import { useReducer, useEffect, useCallback, useState } from 'react'
 import todosReducer, { ACTION as REDUCER_ACTION } from '../reducers/todos'
-import * as api from '../../../api/service'
+import { api1, api2, serviceApi } from '../../../api/service'
 
 export const ACTION = {
   ...REDUCER_ACTION,
@@ -9,10 +9,9 @@ export const ACTION = {
   startToggle: 'startToggle'
 }
 
-const useAsyncTodos = () => {
+const useAsyncTodos = (api: serviceApi) => {
   const [todos, dispatch] = useReducer(todosReducer as any, []) as any
   const [isLoading, setIsLoading] = useState(false)
-
   useEffect(() => {
     setIsLoading(true)
     api
@@ -25,7 +24,7 @@ const useAsyncTodos = () => {
         console.error('Error getting todos', error)
         setIsLoading(false)
       })
-  }, [dispatch])
+  }, [api, dispatch])
 
   const customDispatch = useCallback(
     async (action: any) => {
@@ -71,10 +70,11 @@ const useAsyncTodos = () => {
           dispatch(action)
       }
     },
-    [dispatch]
+    [api, dispatch]
   )
 
   return { todos, dispatch: customDispatch, isLoading }
 }
 
-export default useAsyncTodos
+export const useAsyncTodos1 = () => useAsyncTodos(api1)
+export const useAsyncTodos2 = () => useAsyncTodos(api2)

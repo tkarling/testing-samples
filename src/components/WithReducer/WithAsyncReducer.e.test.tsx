@@ -23,10 +23,18 @@ const mockTodosAfterAdd = [ADDED_TODO, TODO]
 const mockTodosAfterToggle = [{ ...TODO, completed: true }]
 jest.mock('../../api/service', () => {
   return {
-    getTodos: jest.fn(() => Promise.resolve(mockTodosInitial)),
-    addTodo: jest.fn(() => Promise.resolve(mockTodosAfterAdd)),
-    toggleTodo: jest.fn(() => Promise.resolve(mockTodosAfterToggle)),
-    deleteTodo: jest.fn(() => Promise.resolve([]))
+    api1: {
+      getTodos: jest.fn(() => Promise.resolve(mockTodosInitial)),
+      addTodo: jest.fn(() => Promise.resolve(mockTodosAfterAdd)),
+      toggleTodo: jest.fn(() => Promise.resolve(mockTodosAfterToggle)),
+      deleteTodo: jest.fn(() => Promise.resolve([]))
+    },
+    api2: {
+      getTodos: jest.fn(() => Promise.resolve(mockTodosInitial)),
+      addTodo: jest.fn(() => Promise.resolve(mockTodosAfterAdd)),
+      toggleTodo: jest.fn(() => Promise.resolve(mockTodosAfterToggle)),
+      deleteTodo: jest.fn(() => Promise.resolve([]))
+    }
   }
 })
 

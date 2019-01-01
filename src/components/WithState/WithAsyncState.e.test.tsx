@@ -6,7 +6,10 @@ import WithContextAsyncState from './WithContextAsyncState'
 
 const mockExpectedCounter = 6
 jest.mock('../../api/service', () => {
-  return { getCounter: jest.fn(() => Promise.resolve(mockExpectedCounter)) }
+  return {
+    api1: { getCounter: jest.fn(() => Promise.resolve(mockExpectedCounter)) },
+    api2: { getCounter: jest.fn(() => Promise.resolve(mockExpectedCounter)) }
+  }
 })
 ;['WithAsyncState', 'WithContextAsyncState'].forEach(componentName => {
   const setup = () =>

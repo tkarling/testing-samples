@@ -1,6 +1,6 @@
 import React from 'react'
 import WithAsyncState from './WithAsyncState'
-import * as api from '../../api/service'
+import { api1 as api } from '../../api/service'
 import { render, act, waitForElement, cleanup } from '@testing-library/react'
 
 const setup = () => render(<WithAsyncState />)

@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
-import { getCounter } from '../../api/service'
+import { api1 as api } from '../../api/service'
 
 export const useCounter = () => {
   const [counter, setCounter] = useState(0)
   useEffect(() => {
-    getCounter()
+    api
+      .getCounter()
       .then(updatedCounter => setCounter(updatedCounter))
       .catch(error => console.error('Error in useCounter', error))
   }, [])

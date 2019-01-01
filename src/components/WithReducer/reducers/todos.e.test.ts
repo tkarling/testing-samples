@@ -1,25 +1,11 @@
 import todosReducer, { ACTION } from './todos'
+import { expectItem } from '../../../testHelpers.e'
 
 const TODO = { id: '1', title: 'moi', completed: false }
 const TODO2 = { id: '2', title: 'hei', completed: false }
 const INITIAL_TODOS = [TODO, TODO2]
 
 describe('todos Reducer', () => {
-  const expectItem = (
-    { id, title, completed }: Todo,
-    {
-      id: expectedId,
-      title: expectedTitle,
-      completed: expectedCompleted
-    }: Partial<Todo>
-  ) => {
-    if (expectedId) {
-      expect(id).toEqual(expectedId)
-    }
-    expect(title).toContain(expectedTitle)
-    expect(completed).toEqual(expectedCompleted)
-  }
-
   it('sets todos', async () => {
     const todos = todosReducer([], {
       type: ACTION.set,

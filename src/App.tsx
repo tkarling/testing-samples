@@ -15,32 +15,21 @@ const Row = ({ children }: { children: any }) => (
 const Widget = ({ children }: { children: any }) => (
   <div className="AppItem">{children}</div>
 )
+const widget = (component: any) => <Widget>{component}</Widget>
 
 const App: React.FC = () => {
   return (
     <div className="App">
       <Basic />
       <Row>
-        <Widget>
-          <WithState />
-        </Widget>
-        <Widget>
-          <WithAsyncState />
-        </Widget>
-        <Widget>
-          <WithContextAsyncState />
-        </Widget>
+        {widget(<WithState />)}
+        {widget(<WithAsyncState />)}
+        {widget(<WithContextAsyncState />)}
       </Row>
       <Row>
-        <Widget>
-          <WithReducer />
-        </Widget>
-        <Widget>
-          <WithAsyncReducer />
-        </Widget>
-        <Widget>
-          <WithContextAsyncReducer />
-        </Widget>
+        {widget(<WithReducer />)}
+        {widget(<WithAsyncReducer />)}
+        {widget(<WithContextAsyncReducer />)}
       </Row>
     </div>
   )
