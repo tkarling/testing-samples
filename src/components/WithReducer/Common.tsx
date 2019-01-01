@@ -1,5 +1,5 @@
 import React from 'react'
-import './Common.css'
+import styles from './Common.module.css'
 
 export const TEXT = {
   noItems: 'No Items',
@@ -14,19 +14,19 @@ export const TEST_ID = {
 }
 
 export const Row = ({ children }: { children: any }) => (
-  <div className="Row">{children}</div>
+  <div className={styles.Row}>{children}</div>
 )
 
 export const TodoList = ({ children }: { children: any }) => (
-  <div className="TodoList">{children}</div>
+  <div className={styles.TodoList}>{children}</div>
 )
 
 export const Todo = ({ children }: { children: any }) => (
-  <div className="Todo">{children}</div>
+  <div className={styles.Todo}>{children}</div>
 )
 
 export const Title = ({ children }: { children: any }) => (
-  <div className="Title">{children}</div>
+  <div className={styles.Title}>{children}</div>
 )
 export const EmptyList = () => <Row>{TEXT.noItems}</Row>
 
@@ -75,7 +75,7 @@ export const DeleteButton = ({
 }) => (
   <button
     data-testid={TEST_ID.deleteButton}
-    className="DeleteButton"
+    className={styles.DeleteButton}
     onClick={() => dispatch({ type, todo })}
   >
     x
