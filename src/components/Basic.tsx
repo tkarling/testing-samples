@@ -1,5 +1,5 @@
 import React from 'react'
 
-export const Basic = () => <div>Hello</div>
+const Basic = () => <div>Hello</div>
 
 export default Basic
