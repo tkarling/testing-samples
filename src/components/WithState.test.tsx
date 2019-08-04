@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { get, click } from '../testHelpers'
+import { getText, click } from '../testHelpers.e'
 import WithState, { INITIAL_VALUE } from './WithState'
 
 const setup = () => shallow(<WithState />)
@@ -9,12 +9,12 @@ describe('WithState', () => {
 
   it('renders initial value', () => {
     const wrapper = setup()
-    expect(get(wrapper, testId)).toContain(INITIAL_VALUE)
+    expect(getText(wrapper, testId)).toContain(INITIAL_VALUE)
   })
 
   it('can increment', () => {
     const wrapper = setup()
     click(wrapper, testId)
-    expect(get(wrapper, testId)).toContain(INITIAL_VALUE + 1)
+    expect(getText(wrapper, testId)).toContain(INITIAL_VALUE + 1)
   })
 })

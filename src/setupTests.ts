@@ -11,3 +11,12 @@ import Adapter from 'enzyme-adapter-react-16'
 import 'jest-enzyme'
 
 configure({ adapter: new Adapter() })
+
+// FIXME Remove when we upgrade to React >= 16.9
+const originalConsoleError = console.error
+console.error = (...args: any) => {
+  if (/Warning.*not wrapped in act/.test(args[0])) {
+    return
+  }
+  originalConsoleError(...args)
+}

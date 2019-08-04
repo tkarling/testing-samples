@@ -6,7 +6,7 @@ const WithState = () => {
 
   const increment = () => setValue(value => value + 1)
   return (
-    <div onClick={increment} id="value" data-test-id="value">
+    <div onClick={increment} id="value" data-testid="value">
       Value: {value}
     </div>
   )
