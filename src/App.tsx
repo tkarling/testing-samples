@@ -4,6 +4,7 @@ import './App.css'
 import Basic from './components/Basic'
 import WithState from './components/WithState'
 import WithAsync from './components/WithAsync'
+import WithReducer from './components/WithReducer'
 
 const App: React.FC = () => {
   return (
@@ -11,6 +12,7 @@ const App: React.FC = () => {
       <Basic />
       <WithState />
       <WithAsync />
+      <WithReducer />
     </div>
   )
 }
