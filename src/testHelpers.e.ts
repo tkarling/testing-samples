@@ -5,3 +5,5 @@ export const getText = (wrapper: any, id: string) =>
   getElement(wrapper, id).text()
 export const click = (wrapper: any, id: string) =>
   getElement(wrapper, id).simulate('click')
+export const toggleCheck = (wrapper: any, id: string) =>
+  getElement(wrapper, id).prop('onChange')()

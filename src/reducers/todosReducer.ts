@@ -7,6 +7,7 @@ export const ACTIONS = {
 const todosReducer = (state: any, action: any) => {
   switch (action.type) {
     case ACTIONS.add: {
+      // console.log('add called', action.title)
       const id = new Date().getTime() + ''
       return [
         { id, title: action.title + id.substring(9, 13), completed: false },
@@ -14,8 +15,10 @@ const todosReducer = (state: any, action: any) => {
       ]
     }
     case ACTIONS.delete:
+      // console.log('delete called', action.todo.id)
       return state.filter((todo: Todo) => todo.id !== action.todo.id)
     case ACTIONS.toggle:
+      // console.log('toggle called', action.todo.id)
       return state.map((todo: Todo) =>
         todo.id !== action.todo.id
           ? todo
