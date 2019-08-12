@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react'
-import todosReducer, { ACTIONS } from '../reducers/todosReducer'
+import todosReducer, { ACTIONS } from '../reducers/todos'
 
 export const TEXT = {
   noItems: 'No Items',
@@ -58,7 +58,7 @@ const TodoList = ({ todos, dispatch }: { todos: Todo[]; dispatch: any }) => (
 )
 
 const WithReducer = () => {
-  const [todos, dispatch] = useReducer(todosReducer, [])
+  const [todos, dispatch] = useReducer(todosReducer as any, []) as any
 
   return (
     <div data-testid={TEST_ID.container} style={{ border: '1px solid blue' }}>
