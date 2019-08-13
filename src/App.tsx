@@ -7,26 +7,33 @@ import WithAsync from './components/WithAsync'
 import WithReducer from './components/WithReducer'
 import WithAsyncReducer from './components/WithAsyncReducer'
 
+const Row = ({ children }: { children: any }) => (
+  <div className="row">{children}</div>
+)
+const Widget = ({ children }: { children: any }) => (
+  <div className="item">{children}</div>
+)
+
 const App: React.FC = () => {
   return (
     <div className="App">
       <Basic />
-      <div className="row">
-        <div className="item">
+      <Row>
+        <Widget>
           <WithState />
-        </div>
-        <div className="item">
+        </Widget>
+        <Widget>
           <WithAsync />
-        </div>
-      </div>
-      <div className="row">
-        <div className="item">
+        </Widget>
+      </Row>
+      <Row>
+        <Widget>
           <WithReducer />
-        </div>
-        <div className="item">
+        </Widget>
+        <Widget>
           <WithAsyncReducer />
-        </div>
-      </div>
+        </Widget>
+      </Row>
     </div>
   )
 }

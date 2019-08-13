@@ -1,9 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getElement, getText, click } from '../testHelpers.e'
+import { getElement, getText } from '../testHelpers.e'
 import WithAsync from './WithAsync'
-import * as api from '../api/service'
-import { act } from '@testing-library/react'
 
 const mockExpectedValue = 6
 jest.mock('../api/service', () => {
@@ -16,12 +14,14 @@ describe('WithAsync', () => {
   const loadingId = 'loading'
 
   it('renders Loading before fetch', () => {
+    expect.assertions(2)
     const wrapper = setup()
     expect(getText(wrapper, loadingId)).toContain('Loading')
     expect(getElement(wrapper, valueId)).not.toExist()
   })
 
   it('renders async value', async () => {
+    expect.assertions(1)
     const wrapper = await setup()
     await wrapper.update()
     expect(getText(wrapper, valueId)).toContain(mockExpectedValue)

@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect, useCallback } from 'react'
+import React, { useReducer, useEffect, useCallback, useState } from 'react'
 import todosReducer, { ACTIONS } from '../reducers/todos'
 import * as api from '../api/service'
 import * as Widget from './Common'
@@ -27,29 +27,59 @@ const TodoList = ({ todos, dispatch }: { todos: Todo[]; dispatch: any }) => (
 
 const useAsyncTodos = () => {
   const [todos, dispatch] = useReducer(todosReducer as any, []) as any
+  const [isLoading, setIsLoading] = useState(false)
 
   useEffect(() => {
-    api.getTodos().then(aTodos => {
-      dispatch({ type: ACTIONS.set, todos: aTodos })
-    })
+    setIsLoading(true)
+    api
+      .getTodos()
+      .then(aTodos => {
+        dispatch({ type: ACTIONS.set, todos: aTodos })
+        setIsLoading(false)
+      })
+      .catch(error => {
+        console.error('Error getting todos', error)
+        setIsLoading(false)
+      })
   }, [dispatch])
 
   const customDispatch = useCallback(
     async (action: any) => {
       switch (action.type) {
         case ACTIONS.startAdd: {
-          const aTodos = await api.addTodo({ title: action.title })
-          dispatch({ type: ACTIONS.set, todos: aTodos })
+          try {
+            setIsLoading(true)
+            const aTodos = await api.addTodo({ title: action.title })
+            dispatch({ type: ACTIONS.set, todos: aTodos })
+            setIsLoading(false)
+          } catch (error) {
+            console.error('Error adding todo', error, action)
+            setIsLoading(false)
+          }
           break
         }
         case ACTIONS.startDelete: {
-          const aTodos = await api.deleteTodo(action.todo)
-          dispatch({ type: ACTIONS.set, todos: aTodos })
+          try {
+            setIsLoading(true)
+            const aTodos = await api.deleteTodo(action.todo)
+            dispatch({ type: ACTIONS.set, todos: aTodos })
+            setIsLoading(false)
+          } catch (error) {
+            console.error('Error deleting todo', error, action)
+            setIsLoading(false)
+          }
           break
         }
         case ACTIONS.startToggle: {
-          const aTodos = await api.toggleTodo(action.todo)
-          dispatch({ type: ACTIONS.set, todos: aTodos })
+          try {
+            setIsLoading(true)
+            const aTodos = await api.toggleTodo(action.todo)
+            dispatch({ type: ACTIONS.set, todos: aTodos })
+            setIsLoading(false)
+          } catch (error) {
+            console.error('Error toggling todo', error, action)
+            setIsLoading(false)
+          }
           break
         }
         default:
@@ -60,17 +90,18 @@ const useAsyncTodos = () => {
     [dispatch]
   )
 
-  return [todos, customDispatch]
+  return [todos, customDispatch, isLoading]
 }
 
 const WithAsyncReducer = () => {
-  const [todos, dispatch] = useAsyncTodos()
+  const [todos, dispatch, isLoading] = useAsyncTodos()
 
   return (
     <div data-testid={TEST_ID.container}>
       <h4>With Async Reducer</h4>
-      {!todos.length && <Widget.EmptyList />}
-      <TodoList todos={todos} dispatch={dispatch} />
+      {isLoading && <div>Loading...</div>}
+      {!isLoading && !todos.length && <Widget.EmptyList />}
+      {!isLoading && <TodoList todos={todos} dispatch={dispatch} />}
     </div>
   )
 }
