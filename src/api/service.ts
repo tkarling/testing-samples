@@ -20,23 +20,36 @@ export const FETCHED_TODOS: Todo[] = [
 ]
 
 let todos = FETCHED_TODOS
+
+// needed for unit testing
+export const resetTodos = () => {
+  todos = FETCHED_TODOS
+}
+
 export const getTodos = () => stall().then(() => todos)
 
-export const addTodo = ({ title, completed = false }: Partial<Todo>) =>
+export const addTodo = ({
+  title = 'unknown',
+  completed = false
+}: Partial<Todo>) =>
   stall().then(() => {
-    return [{ id: getId, title, completed }, ...todos]
+    const id = getId()
+    todos = [{ id, title: title + id.substring(9, 13), completed }, ...todos]
+    return todos
   })
 
 export const deleteTodo = (todoToDelete: Todo) =>
   stall().then(() => {
-    return todos.filter(todo => todo.id !== todoToDelete.id)
+    todos = todos.filter(todo => todo.id !== todoToDelete.id)
+    return todos
   })
 
 export const toggleTodo = (todoToToggle: Todo) =>
   stall().then(() => {
-    return todos.map(todo =>
+    todos = todos.map(todo =>
       todo.id !== todoToToggle.id
         ? todo
         : { ...todo, completed: !todo.completed }
     )
+    return todos
   })

@@ -15,6 +15,9 @@ describe('api', () => {
     title === expectedTitle &&
     (completed !== undefined ? completed === expectedComplete : true)
 
+  beforeEach(() => {
+    api.resetTodos()
+  })
   it('gets value', async () => {
     const data = await callApi(api.getValue)
     expect(data).toEqual(api.FETCHED_VALUE)

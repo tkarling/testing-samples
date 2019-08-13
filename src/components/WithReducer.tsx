@@ -1,57 +1,24 @@
 import React, { useReducer } from 'react'
 import todosReducer, { ACTIONS } from '../reducers/todos'
-
-export const TEXT = {
-  noItems: 'No Items',
-  itemTitleBase: 'moi'
-}
-
-export const TEST_ID = {
-  container: 'withReducer',
-  addButton: 'addButton',
-  deleteButton: 'deleteButton',
-  toggleCheck: 'toggleCheck'
-}
-
-const EmptyList = () => <div>{TEXT.noItems}</div>
-
-const AddButton = ({ dispatch }: { dispatch: any }) => (
-  <div>
-    <button
-      data-testid={TEST_ID.addButton}
-      onClick={() => dispatch({ type: ACTIONS.add, title: TEXT.itemTitleBase })}
-    >
-      Add
-    </button>
-  </div>
-)
-
-const CheckBox = ({ todo, dispatch }: { todo: Todo; dispatch: any }) => (
-  <input
-    data-testid={TEST_ID.toggleCheck}
-    type="checkbox"
-    checked={todo.completed}
-    onChange={() => dispatch({ type: ACTIONS.toggle, todo })}
-  />
-)
-
-const DeleteButton = ({ todo, dispatch }: { todo: Todo; dispatch: any }) => (
-  <button
-    data-testid={TEST_ID.deleteButton}
-    onClick={() => dispatch({ type: ACTIONS.delete, todo })}
-  >
-    x
-  </button>
-)
+import * as Widget from './Common'
+import { TEST_ID } from './Common'
 
 const TodoList = ({ todos, dispatch }: { todos: Todo[]; dispatch: any }) => (
   <div>
-    <AddButton dispatch={dispatch} />
+    <Widget.AddButton dispatch={dispatch} type={ACTIONS.add} />
     {todos.map((todo: Todo) => (
       <div key={todo.id}>
-        <CheckBox todo={todo} dispatch={dispatch} />
+        <Widget.CheckBox
+          todo={todo}
+          dispatch={dispatch}
+          type={ACTIONS.toggle}
+        />
         {todo.title}
-        <DeleteButton todo={todo} dispatch={dispatch} />
+        <Widget.DeleteButton
+          todo={todo}
+          dispatch={dispatch}
+          type={ACTIONS.delete}
+        />
       </div>
     ))}
   </div>
@@ -61,8 +28,9 @@ const WithReducer = () => {
   const [todos, dispatch] = useReducer(todosReducer as any, []) as any
 
   return (
-    <div data-testid={TEST_ID.container} style={{ border: '1px solid blue' }}>
-      {!todos.length && <EmptyList />}
+    <div data-testid={TEST_ID.container}>
+      <h4>With Reducer</h4>
+      {!todos.length && <Widget.EmptyList />}
       <TodoList todos={todos} dispatch={dispatch} />
     </div>
   )

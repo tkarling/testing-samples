@@ -1,7 +1,8 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { getElement, getText, click, toggleCheck } from '../testHelpers.e'
-import WithReducer, { TEXT, TEST_ID } from './WithReducer'
+import { TEXT, TEST_ID } from './Common'
+import WithReducer from './WithReducer'
 
 const setup = () => mount(<WithReducer />)
 describe('WithState', () => {
@@ -32,7 +33,7 @@ describe('WithState', () => {
       await wrapper.update()
       expect(getElement(wrapper, TEST_ID.toggleCheck)).toBeChecked()
 
-      // toggle completed vback to false
+      // toggle completed back to false
       toggleCheck(wrapper, TEST_ID.toggleCheck)
       await wrapper.update()
       expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()

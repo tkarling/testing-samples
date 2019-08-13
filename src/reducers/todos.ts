@@ -2,7 +2,10 @@ export const ACTIONS = {
   set: 'set',
   add: 'add',
   delete: 'delete',
-  toggle: 'toggle'
+  toggle: 'toggle',
+  startAdd: 'startAdd',
+  startDelete: 'startDelete',
+  startToggle: 'startToggle'
 }
 
 const todosReducer = (
