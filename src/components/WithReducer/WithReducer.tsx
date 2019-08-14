@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react'
-import todosReducer, { ACTIONS } from '../reducers/todos'
+import todosReducer, { ACTIONS } from '../../reducers/todos'
 import * as Widget from './Common'
 import { TEST_ID } from './Common'
 

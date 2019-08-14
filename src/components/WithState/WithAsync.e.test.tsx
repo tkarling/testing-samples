@@ -1,10 +1,10 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getElement, getText } from '../testHelpers.e'
+import { getElement, getText } from '../../testHelpers.e'
 import WithAsync from './WithAsync'
 
 const mockExpectedValue = 6
-jest.mock('../api/service', () => {
+jest.mock('../../api/service', () => {
   return { getValue: jest.fn(() => Promise.resolve(mockExpectedValue)) }
 })
 

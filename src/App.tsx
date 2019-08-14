@@ -2,10 +2,10 @@ import React from 'react'
 import './App.css'
 
 import Basic from './components/Basic'
-import WithState from './components/WithState'
-import WithAsync from './components/WithAsync'
-import WithReducer from './components/WithReducer'
-import WithAsyncReducer from './components/WithAsyncReducer'
+import WithState from './components/WithState/WithState'
+import WithAsync from './components/WithState/WithAsync'
+import WithReducer from './components/WithReducer/WithReducer'
+import WithAsyncReducer from './components/WithReducer/WithAsyncReducer'
 
 const Row = ({ children }: { children: any }) => (
   <div className="row">{children}</div>

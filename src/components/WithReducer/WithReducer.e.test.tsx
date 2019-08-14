@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getElement, getText, click, toggleCheck } from '../testHelpers.e'
+import { getElement, getText, click, toggleCheck } from '../../testHelpers.e'
 import { TEXT, TEST_ID } from './Common'
 import WithReducer from './WithReducer'
 

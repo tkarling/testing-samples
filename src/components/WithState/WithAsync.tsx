@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { getValue } from '../api/service'
+import { getValue } from '../../api/service'
 
 const WithState = () => {
   const [value, setValue] = useState(0)

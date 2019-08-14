@@ -1,6 +1,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
-import { getText, click } from '../testHelpers.e'
+import { getText, click } from '../../testHelpers.e'
 import WithState, { INITIAL_VALUE } from './WithState'
 
 const setup = () => shallow(<WithState />)

@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getElement, getText, click, toggleCheck } from '../testHelpers.e'
+import { getElement, getText, click, toggleCheck } from '../../testHelpers.e'
 import { TEXT, TEST_ID } from './Common'
 import WithAsyncReducer from './WithAsyncReducer'
 
@@ -26,7 +26,7 @@ const ADDED_TODO = {
 const mockTodosInitial = [TODO]
 const mockTodosAfterAdd = [ADDED_TODO, TODO]
 const mockTodosAfterToggle = [{ ...TODO, completed: true }]
-jest.mock('../api/service', () => {
+jest.mock('../../api/service', () => {
   return {
     getTodos: jest.fn(() => Promise.resolve(mockTodosInitial)),
     addTodo: jest.fn(() => Promise.resolve(mockTodosAfterAdd)),

@@ -1,6 +1,6 @@
 import React, { useReducer, useEffect, useCallback, useState } from 'react'
-import todosReducer, { ACTIONS } from '../reducers/todos'
-import * as api from '../api/service'
+import todosReducer, { ACTIONS } from '../../reducers/todos'
+import * as api from '../../api/service'
 import * as Widget from './Common'
 import { TEST_ID } from './Common'
 
