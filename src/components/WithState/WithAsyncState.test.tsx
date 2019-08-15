@@ -1,10 +1,10 @@
 import React from 'react'
-import WithAsync from './WithAsync'
+import WithAsyncState from './WithAsyncState'
 import * as api from '../../api/service'
 import { render, act, waitForElement, cleanup } from '@testing-library/react'
 
-const setup = () => render(<WithAsync />)
-describe('WithAsync', () => {
+const setup = () => render(<WithAsyncState />)
+describe('WithAsyncState', () => {
   const EXPECTED_VALUE = 42
   beforeEach(() => {
     api.getValue = jest.fn().mockResolvedValueOnce(EXPECTED_VALUE)

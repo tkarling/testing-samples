@@ -3,8 +3,8 @@ import './App.css'
 
 import Basic from './components/Basic'
 import WithState from './components/WithState/WithState'
-import WithAsync from './components/WithState/WithAsync'
-import WithAsyncProvider from './components/WithState/WithContextAsyncState'
+import WithAsyncState from './components/WithState/WithAsyncState'
+import WithContextAsyncState from './components/WithState/WithContextAsyncState'
 import WithReducer from './components/WithReducer/WithReducer'
 import WithAsyncReducer from './components/WithReducer/WithAsyncReducer'
 
@@ -24,10 +24,10 @@ const App: React.FC = () => {
           <WithState />
         </Widget>
         <Widget>
-          <WithAsync />
+          <WithAsyncState />
         </Widget>
         <Widget>
-          <WithAsyncProvider />
+          <WithContextAsyncState />
         </Widget>
       </Row>
       <Row>
