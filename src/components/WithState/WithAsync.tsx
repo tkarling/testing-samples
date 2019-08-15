@@ -1,20 +1,10 @@
-import React, { useState, useEffect } from 'react'
-import { getValue } from '../../api/service'
+import React from 'react'
+import { Value, useValue } from './Common'
 
-const WithState = () => {
-  const [value, setValue] = useState(0)
-  useEffect(() => {
-    getValue().then(updatedValue => setValue(updatedValue))
-  }, [])
+const WithAsyncState = () => {
+  const { value, increment } = useValue()
 
-  const increment = () => setValue(value => value + 1)
-  return value ? (
-    <div onClick={increment} id="value" data-testid="value">
-      Async Value: {value}
-    </div>
-  ) : (
-    <div data-testid="loading">Loading...</div>
-  )
+  return <Value title="Async Value" value={value} increment={increment} />
 }
 
-export default WithState
+export default WithAsyncState

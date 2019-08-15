@@ -4,6 +4,7 @@ import './App.css'
 import Basic from './components/Basic'
 import WithState from './components/WithState/WithState'
 import WithAsync from './components/WithState/WithAsync'
+import WithAsyncProvider from './components/WithState/WithContextAsyncState'
 import WithReducer from './components/WithReducer/WithReducer'
 import WithAsyncReducer from './components/WithReducer/WithAsyncReducer'
 
@@ -24,6 +25,9 @@ const App: React.FC = () => {
         </Widget>
         <Widget>
           <WithAsync />
+        </Widget>
+        <Widget>
+          <WithAsyncProvider />
         </Widget>
       </Row>
       <Row>

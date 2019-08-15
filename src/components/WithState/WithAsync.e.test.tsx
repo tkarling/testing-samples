@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getElement, getText } from '../../testHelpers.e'
+import { getElement, getText, click } from '../../testHelpers.e'
 import WithAsync from './WithAsync'
 
 const mockExpectedValue = 6
@@ -25,5 +25,13 @@ describe('WithAsync', () => {
     const wrapper = await setup()
     await wrapper.update()
     expect(getText(wrapper, valueId)).toContain(mockExpectedValue)
+  })
+
+  it('can increment', async () => {
+    const wrapper = await setup()
+    await wrapper.update()
+    click(wrapper, valueId)
+    await wrapper.update()
+    expect(getText(wrapper, valueId)).toContain(mockExpectedValue + 1)
   })
 })
