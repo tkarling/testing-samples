@@ -8,10 +8,10 @@ import WithReducer from './components/WithReducer/WithReducer'
 import WithAsyncReducer from './components/WithReducer/WithAsyncReducer'
 
 const Row = ({ children }: { children: any }) => (
-  <div className="row">{children}</div>
+  <div className="AppRow">{children}</div>
 )
 const Widget = ({ children }: { children: any }) => (
-  <div className="item">{children}</div>
+  <div className="AppItem">{children}</div>
 )
 
 const App: React.FC = () => {

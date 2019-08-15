@@ -1,0 +1,31 @@
+button {
+  background-color: cornflowerblue;
+  border: 1px solid cornflowerblue;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 4px;
+}
+
+.DeleteButton {
+  background-color: crimson;
+  border: 1px solid crimson;
+  padding: 1px 5px 3px;
+}
+
+.Row {
+  line-height: 30px;
+}
+
+.TodoList {
+  padding: 0px 10px;
+}
+
+.Todo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+input[type='checkbox']:checked + .Title {
+  text-decoration: line-through;
+}

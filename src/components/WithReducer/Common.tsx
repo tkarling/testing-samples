@@ -1,4 +1,5 @@
 import React from 'react'
+import './Common.css'
 
 export const TEXT = {
   noItems: 'No Items',
@@ -12,7 +13,22 @@ export const TEST_ID = {
   toggleCheck: 'toggleCheck'
 }
 
-export const EmptyList = () => <div>{TEXT.noItems}</div>
+export const Row = ({ children }: { children: any }) => (
+  <div className="Row">{children}</div>
+)
+
+export const TodoList = ({ children }: { children: any }) => (
+  <div className="TodoList">{children}</div>
+)
+
+export const Todo = ({ children }: { children: any }) => (
+  <div className="Todo">{children}</div>
+)
+
+export const Title = ({ children }: { children: any }) => (
+  <div className="Title">{children}</div>
+)
+export const EmptyList = () => <Row>{TEXT.noItems}</Row>
 
 export const AddButton = ({
   dispatch,
@@ -59,6 +75,7 @@ export const DeleteButton = ({
 }) => (
   <button
     data-testid={TEST_ID.deleteButton}
+    className="DeleteButton"
     onClick={() => dispatch({ type, todo })}
   >
     x

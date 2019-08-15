@@ -5,24 +5,29 @@ import * as Widget from './Common'
 import { TEST_ID } from './Common'
 
 const TodoList = ({ todos, dispatch }: { todos: Todo[]; dispatch: any }) => (
-  <div>
-    <Widget.AddButton dispatch={dispatch} type={ACTIONS.startAdd} />
+  <Widget.TodoList>
+    <Widget.Row>
+      <Widget.AddButton dispatch={dispatch} type={ACTIONS.startAdd} />
+    </Widget.Row>
+    {!todos.length && <Widget.EmptyList />}
     {todos.map((todo: Todo) => (
-      <div key={todo.id}>
-        <Widget.CheckBox
-          todo={todo}
-          dispatch={dispatch}
-          type={ACTIONS.startToggle}
-        />
-        {todo.title}
-        <Widget.DeleteButton
-          todo={todo}
-          dispatch={dispatch}
-          type={ACTIONS.startDelete}
-        />
-      </div>
+      <Widget.Row key={todo.id}>
+        <Widget.Todo>
+          <Widget.CheckBox
+            todo={todo}
+            dispatch={dispatch}
+            type={ACTIONS.startToggle}
+          />
+          <Widget.Title>{todo.title}</Widget.Title>
+          <Widget.DeleteButton
+            todo={todo}
+            dispatch={dispatch}
+            type={ACTIONS.startDelete}
+          />
+        </Widget.Todo>
+      </Widget.Row>
     ))}
-  </div>
+  </Widget.TodoList>
 )
 
 const useAsyncTodos = () => {
@@ -100,7 +105,6 @@ const WithAsyncReducer = () => {
     <div data-testid={TEST_ID.container}>
       <h4>With Async Reducer</h4>
       {isLoading && <div>Loading...</div>}
-      {!isLoading && !todos.length && <Widget.EmptyList />}
       {!isLoading && <TodoList todos={todos} dispatch={dispatch} />}
     </div>
   )
