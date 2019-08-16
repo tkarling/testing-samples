@@ -7,6 +7,7 @@ import WithAsyncState from './components/WithState/WithAsyncState'
 import WithContextAsyncState from './components/WithState/WithContextAsyncState'
 import WithReducer from './components/WithReducer/WithReducer'
 import WithAsyncReducer from './components/WithReducer/WithAsyncReducer'
+import WithContextAsyncReducer from './components/WithReducer/WithContextAsyncReducer'
 
 const Row = ({ children }: { children: any }) => (
   <div className="AppRow">{children}</div>
@@ -36,6 +37,9 @@ const App: React.FC = () => {
         </Widget>
         <Widget>
           <WithAsyncReducer />
+        </Widget>
+        <Widget>
+          <WithContextAsyncReducer />
         </Widget>
       </Row>
     </div>
