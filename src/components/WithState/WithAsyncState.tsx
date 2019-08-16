@@ -1,10 +1,12 @@
 import React from 'react'
-import { Value, useValue } from './Common'
+import { Counter, useCounter } from './Common'
 
 const WithAsyncState = () => {
-  const { value, increment } = useValue()
+  const { counter, increment } = useCounter()
 
-  return <Value title="Async Value" value={value} increment={increment} />
+  return (
+    <Counter title="Async Counter" counter={counter} increment={increment} />
+  )
 }
 
 export default WithAsyncState

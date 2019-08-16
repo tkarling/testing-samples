@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from 'react'
-import { getValue } from '../../api/service'
+import { getCounter } from '../../api/service'
 
-export const useValue = () => {
-  const [value, setValue] = useState(0)
+export const useCounter = () => {
+  const [counter, setCounter] = useState(0)
   useEffect(() => {
-    getValue()
-      .then(updatedValue => setValue(updatedValue))
-      .catch(error => console.error('Error in useValue', error))
+    getCounter()
+      .then(updatedCounter => setCounter(updatedCounter))
+      .catch(error => console.error('Error in useCounter', error))
   }, [])
 
-  const increment = () => setValue(value => value + 1)
-  return { value, increment }
+  const increment = () => setCounter(counter => counter + 1)
+  return { counter, increment }
 }
 
-export const Value = ({
-  value,
+export const Counter = ({
+  counter,
   increment,
   title
 }: {
-  value: number
+  counter: number
   increment: any
   title: string
 }) =>
-  value ? (
-    <div onClick={increment} id="value" data-testid="value">
-      {title}: {value}
+  counter ? (
+    <div onClick={increment} id="counter" data-testid="counter">
+      {title}: {counter}
     </div>
   ) : (
     <div data-testid="loading">Loading...</div>

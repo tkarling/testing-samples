@@ -1,25 +1,30 @@
 import React, { useContext } from 'react'
-import { Value, useValue } from './Common'
+import { Counter, useCounter } from './Common'
 
 const WithAsyncConsumer = () => {
-  const value = useContext(ValueContext)
+  const counter = useContext(CounterContext)
   const { increment } = useContext(ActionContext)
   return (
-    <Value title="Context Async Value" value={value} increment={increment} />
+    <Counter
+      title="Context Async Counter"
+      counter={counter}
+      increment={increment}
+    />
   )
 }
 
-const ValueContext = React.createContext(0)
-const ActionContext = React.createContext({ increment: () => {} })
+const noop = () => {}
+const CounterContext = React.createContext(0)
+const ActionContext = React.createContext({ increment: noop })
 
 const WithAsyncProvider = () => {
-  const { value, increment } = useValue()
+  const { counter, increment } = useCounter()
 
   return (
     <ActionContext.Provider value={{ increment }}>
-      <ValueContext.Provider value={value}>
+      <CounterContext.Provider value={counter}>
         <WithAsyncConsumer />
-      </ValueContext.Provider>
+      </CounterContext.Provider>
     </ActionContext.Provider>
   )
 }

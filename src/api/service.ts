@@ -1,10 +1,10 @@
-async function stall(stallTime = 3000) {
+async function stall(stallTime = 1000) {
   await new Promise(resolve => setTimeout(resolve, stallTime))
 }
 const getId = () => Date.now() + ''
 
-export const FETCHED_VALUE = 5
-export const getValue = () => stall().then(() => FETCHED_VALUE)
+export const FETCHED_COUNTER = 5
+export const getCounter = () => stall().then(() => FETCHED_COUNTER)
 
 export const FETCHED_TODOS: Todo[] = [
   {

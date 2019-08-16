@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 
-export const INITIAL_VALUE = 2
+export const INITIAL_COUNTER = 2
 const WithState = () => {
-  const [value, setValue] = useState(INITIAL_VALUE)
+  const [counter, setCounter] = useState(INITIAL_COUNTER)
 
-  const increment = () => setValue(value => value + 1)
+  const increment = () => setCounter(counter => counter + 1)
   return (
-    <div onClick={increment} id="value" data-testid="value">
-      Value: {value}
+    <div onClick={increment} id="counter" data-testid="counter">
+      Counter: {counter}
     </div>
   )
 }

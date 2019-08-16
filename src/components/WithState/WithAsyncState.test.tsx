@@ -5,51 +5,51 @@ import { render, act, waitForElement, cleanup } from '@testing-library/react'
 
 const setup = () => render(<WithAsyncState />)
 describe('WithAsyncState', () => {
-  const EXPECTED_VALUE = 42
+  const EXPECTED_COUNTER = 42
   beforeEach(() => {
-    api.getValue = jest.fn().mockResolvedValueOnce(EXPECTED_VALUE)
+    api.getCounter = jest.fn().mockResolvedValueOnce(EXPECTED_COUNTER)
   })
 
   describe('find by text', () => {
     it('renders Loading before fetch', () => {
       const { getByText, queryByText } = setup()
       expect(getByText(/Loading/).textContent).toContain('Loading')
-      expect(queryByText(/Value/)).toBeNull()
+      expect(queryByText(/Counter/)).toBeNull()
     })
 
-    it('renders async value after fetch', async () => {
+    it('renders async counter after fetch', async () => {
       const { getByText, queryByText } = setup()
-      const valueEl = await waitForElement(() => getByText(/Value/))
-      expect(valueEl.textContent).toContain(EXPECTED_VALUE)
+      const counterEl = await waitForElement(() => getByText(/Counter/))
+      expect(counterEl.textContent).toContain(EXPECTED_COUNTER)
       expect(queryByText(/Loading/)).toBeNull()
     })
 
-    it('renders async value after fetch w custom value', async () => {
-      const EXPECTED_VALUE2 = 15
-      api.getValue = jest.fn().mockResolvedValueOnce(EXPECTED_VALUE2)
+    it('renders async counter after fetch w custom counter', async () => {
+      const EXPECTED_COUNTER2 = 15
+      api.getCounter = jest.fn().mockResolvedValueOnce(EXPECTED_COUNTER2)
 
       const { getByText } = setup()
-      const valueEl = await waitForElement(() => getByText(/Value/))
-      expect(valueEl.textContent).toContain(EXPECTED_VALUE2)
+      const counterEl = await waitForElement(() => getByText(/Counter/))
+      expect(counterEl.textContent).toContain(EXPECTED_COUNTER2)
     })
   })
 
   describe('find by testId', () => {
     const loadingId = 'loading'
-    const valueId = 'value'
+    const counterId = 'counter'
 
     it('renders Loading before fetch', () => {
       const { getByTestId, queryByTestId } = setup()
       expect(getByTestId(loadingId)).toHaveTextContent('Loading...')
-      expect(queryByTestId(valueId)).toBeNull()
+      expect(queryByTestId(counterId)).toBeNull()
     })
 
-    it('renders async value after fetch', async () => {
+    it('renders async counter after fetch', async () => {
       const { getByTestId } = setup()
-      const valueText = await waitForElement(
-        () => getByTestId(valueId).textContent
+      const counterText = await waitForElement(
+        () => getByTestId(counterId).textContent
       )
-      expect(valueText).toContain(EXPECTED_VALUE)
+      expect(counterText).toContain(EXPECTED_COUNTER)
     })
   })
 })

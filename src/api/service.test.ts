@@ -18,9 +18,9 @@ describe('api', () => {
   beforeEach(() => {
     api.resetTodos()
   })
-  it('gets value', async () => {
-    const data = await callApi(api.getValue)
-    expect(data).toEqual(api.FETCHED_VALUE)
+  it('gets counter', async () => {
+    const data = await callApi(api.getCounter)
+    expect(data).toEqual(api.FETCHED_COUNTER)
   })
 
   it('gets todos', async () => {
