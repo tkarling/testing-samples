@@ -1,11 +1,8 @@
-export const ACTIONS = {
+export const ACTION = {
   set: 'set',
   add: 'add',
   delete: 'delete',
-  toggle: 'toggle',
-  startAdd: 'startAdd',
-  startDelete: 'startDelete',
-  startToggle: 'startToggle'
+  toggle: 'toggle'
 }
 
 const todosReducer = (
@@ -18,10 +15,10 @@ const todosReducer = (
   }: { type: any; title?: string; todo?: Todo; todos?: Todo[] }
 ) => {
   switch (type) {
-    case ACTIONS.set:
+    case ACTION.set:
       // console.log('set called', action.todos)
       return todos || []
-    case ACTIONS.add: {
+    case ACTION.add: {
       // console.log('add called', action.title)
       const id = new Date().getTime() + ''
       return [
@@ -29,12 +26,12 @@ const todosReducer = (
         ...state
       ]
     }
-    case ACTIONS.delete:
+    case ACTION.delete:
       // console.log('delete called', action.todo.id)
       return state.filter((todoC: Todo) =>
         todo ? todoC.id !== todo.id : todoC
       )
-    case ACTIONS.toggle:
+    case ACTION.toggle:
       // console.log('toggle called', action.todo.id)
       return state.map((todoC: Todo) =>
         todo && todoC.id === todo.id

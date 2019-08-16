@@ -1,4 +1,4 @@
-import todosReducer, { ACTIONS } from './todos'
+import todosReducer, { ACTION } from './todos'
 
 const TODO = { id: '1', title: 'moi', completed: false }
 const TODO2 = { id: '2', title: 'hei', completed: false }
@@ -22,7 +22,7 @@ describe('todos Reducer', () => {
 
   it('sets todos', async () => {
     const todos = todosReducer([], {
-      type: ACTIONS.set,
+      type: ACTION.set,
       todos: INITIAL_TODOS
     })
     expect(todos.length).toBe(2)
@@ -33,7 +33,7 @@ describe('todos Reducer', () => {
   it('adds todo', async () => {
     const TITLE = 'joo'
     const todos = todosReducer(INITIAL_TODOS, {
-      type: ACTIONS.add,
+      type: ACTION.add,
       title: TITLE
     })
     expect(todos.length).toBe(INITIAL_TODOS.length + 1)
@@ -44,7 +44,7 @@ describe('todos Reducer', () => {
 
   it('deletes todo', async () => {
     const todos = todosReducer(INITIAL_TODOS, {
-      type: ACTIONS.delete,
+      type: ACTION.delete,
       todo: INITIAL_TODOS[0]
     })
     expect(todos.length).toBe(INITIAL_TODOS.length - 1)
@@ -53,7 +53,7 @@ describe('todos Reducer', () => {
 
   it('toggles todo', async () => {
     const todos = todosReducer(INITIAL_TODOS, {
-      type: ACTIONS.toggle,
+      type: ACTION.toggle,
       todo: INITIAL_TODOS[0]
     })
     expect(todos.length).toBe(INITIAL_TODOS.length)

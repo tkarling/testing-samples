@@ -1,12 +1,12 @@
 import React, { useReducer } from 'react'
-import todosReducer, { ACTIONS } from '../../reducers/todos'
+import todosReducer, { ACTION } from './reducers/todos'
 import * as Widget from './Common'
 import { TEST_ID } from './Common'
 
 const TodoList = ({ todos, dispatch }: { todos: Todo[]; dispatch: any }) => (
   <Widget.TodoList>
     <Widget.Row>
-      <Widget.AddButton dispatch={dispatch} type={ACTIONS.add} />
+      <Widget.AddButton dispatch={dispatch} type={ACTION.add} />
     </Widget.Row>
     {!todos.length && <Widget.EmptyList />}
     {todos.map((todo: Todo) => (
@@ -15,13 +15,13 @@ const TodoList = ({ todos, dispatch }: { todos: Todo[]; dispatch: any }) => (
           <Widget.CheckBox
             todo={todo}
             dispatch={dispatch}
-            type={ACTIONS.toggle}
+            type={ACTION.toggle}
           />
           <Widget.Title>{todo.title}</Widget.Title>
           <Widget.DeleteButton
             todo={todo}
             dispatch={dispatch}
-            type={ACTIONS.delete}
+            type={ACTION.delete}
           />
         </Widget.Todo>
       </Widget.Row>
