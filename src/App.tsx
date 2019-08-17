@@ -8,6 +8,7 @@ import WithContextAsyncState from './components/WithState/WithContextAsyncState'
 import WithReducer from './components/WithReducer/WithReducer'
 import WithAsyncReducer from './components/WithReducer/WithAsyncReducer'
 import WithContextAsyncReducer from './components/WithReducer/WithContextAsyncReducer'
+import LoginOrRegisterForm from './components/form/LoginOrRegister'
 
 const Row = ({ children }: { children: any }) => (
   <div className="AppRow">{children}</div>
@@ -26,6 +27,7 @@ const App: React.FC = () => {
         {widget(<WithAsyncState />)}
         {widget(<WithContextAsyncState />)}
       </Row>
+      <Row>{widget(<LoginOrRegisterForm />)}</Row>
       <Row>
         {widget(<WithReducer />)}
         {widget(<WithAsyncReducer />)}

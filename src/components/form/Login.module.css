@@ -1,0 +1,44 @@
+.FormField {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  padding-top: 5px;
+}
+
+.FormFieldInput {
+  flex-basis: 50%;
+}
+
+.Form {
+  display: flex;
+  flex-direction: column;
+  max-width: 80%;
+  margin: auto;
+  margin-top: 10px;
+  padding: 10px;
+  border: 1px solid cornflowerblue;
+  border-radius: 5px;
+}
+
+.FormTitleRow {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: space-between;
+}
+.FormTitle {
+  font-weight: 700;
+}
+.FormLink {
+  font-size: 50%;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.FormSubmit {
+  margin: auto;
+  margin-top: 10px;
+  padding: 5px;
+  width: 50%;
+  border: 1px solid cornflowerblue;
+}
