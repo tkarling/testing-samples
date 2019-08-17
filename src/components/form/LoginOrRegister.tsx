@@ -18,8 +18,8 @@ const Login = ({
       title="Sign In"
       link={{ label: 'Need an account? Sign Up', onClick: onGoto }}
     >
-      <FormField field={FIELDS.username} onChange={onChange} />
-      <FormField field={FIELDS.password} onChange={onChange} />
+      <FormField {...FIELDS.username} onChange={onChange} />
+      <FormField {...FIELDS.password} onChange={onChange} />
     </Form>
   )
 }
@@ -39,9 +39,13 @@ const Register = ({
       title="Sign Up"
       link={{ label: 'Return to Sign In', onClick: onGoto }}
     >
-      <FormField field={FIELDS.username} onChange={onChange} />
-      <FormField field={FIELDS.password} onChange={onChange} />
-      <FormField field={FIELDS.repeatPassword} onChange={onChange} />
+      <FormField {...FIELDS.username} autoComplete="off" onChange={onChange} />
+      <FormField {...FIELDS.password} autoComplete="off" onChange={onChange} />
+      <FormField
+        {...FIELDS.repeatPassword}
+        autoComplete="off"
+        onChange={onChange}
+      />
     </Form>
   )
 }

@@ -4,6 +4,7 @@ export interface Field {
   placeholder?: string
   name?: string
   type?: string
+  autoComplete?: string
   required?: boolean
   regX?: string
 }
@@ -16,6 +17,7 @@ export const FIELDS = {
   username: {
     id: 'username',
     label: 'Username',
+    autoComplete: 'username',
     placeholder: 'Email or Username',
     required: true,
     regx: REGX.username
@@ -23,6 +25,7 @@ export const FIELDS = {
   password: {
     id: 'password',
     label: 'Password',
+    autoComplete: 'current-password',
     type: 'password',
     required: true,
     regx: REGX.password

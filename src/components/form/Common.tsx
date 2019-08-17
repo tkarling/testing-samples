@@ -1,24 +1,33 @@
 import React, { useCallback } from 'react'
 
 import styles from './Login.module.css'
-import { Field } from './data'
 
 export const FormField = ({
-  field,
+  id,
+  label,
+  placeholder,
+  name,
+  type,
+  autoComplete,
   onChange
 }: {
-  field: Field
+  id: string
+  label?: string
+  placeholder?: string
+  name?: string
+  type?: string
+  autoComplete?: string
   onChange: Function
 }) => (
   <div className={styles.FormField}>
-    <label>{field.label || field.id}:</label>
+    <label>{label || id}:</label>
     <input
       className={styles.FormFieldInput}
-      name={field.name || field.id}
-      type={field.type}
+      name={name || id}
+      type={type}
       onChange={onChange as any}
-      required={field.required}
-      placeholder={field.placeholder || field.label || field.id}
+      placeholder={placeholder || label || id}
+      autoComplete={autoComplete}
     />
   </div>
 )
