@@ -2,6 +2,10 @@ import React, { useCallback } from 'react'
 
 import styles from './Login.module.css'
 
+export const TEST_ID = {
+  link: 'link',
+  submitButton: 'submitButton'
+}
 export const FormField = ({
   id,
   label,
@@ -55,56 +59,19 @@ export const Form = ({
       <div className={styles.FormTitleRow}>
         <div className={styles.FormTitle}>{title}</div>
         {link && (
-          <a className={styles.FormLink} onClick={link.onClick}>
+          <a
+            data-testid={TEST_ID.link}
+            className={styles.FormLink}
+            onClick={link.onClick}
+          >
             {link.label}
           </a>
         )}
       </div>
       {children}
-      <button className={styles.FormSubmit}>Submit</button>
+      <button data-testid={TEST_ID.submitButton} className={styles.FormSubmit}>
+        Submit
+      </button>
     </form>
   )
 }
-
-// export const Login = ({
-//   onChange,
-//   onSubmit,
-//   onGoto
-// }: {
-//   onChange?: any
-//   onSubmit?: any
-//   onGoto?: any
-// }) => {
-//   return (
-//     <Form
-//       onSubmit={onSubmit}
-//       title="Sign In"
-//       link={{ label: 'Need an account? Sign Up', onClick: onGoto }}
-//     >
-//       <FormField field={FIELDS.username} onChange={onChange} />
-//       <FormField field={FIELDS.password} onChange={onChange} />
-//     </Form>
-//   )
-// }
-
-// export const Register = ({
-//   onChange,
-//   onSubmit,
-//   onGoto
-// }: {
-//   onChange?: any
-//   onSubmit?: any
-//   onGoto?: any
-// }) => {
-//   return (
-//     <Form
-//       onSubmit={onSubmit}
-//       title="Sign Up"
-//       link={{ label: 'Return to Sign In', onClick: onGoto }}
-//     >
-//       <FormField field={FIELDS.username} onChange={onChange} />
-//       <FormField field={FIELDS.password} onChange={onChange} />
-//       <FormField field={FIELDS.repeatPassword} onChange={onChange} />
-//     </Form>
-//   )
-// }

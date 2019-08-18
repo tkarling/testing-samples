@@ -3,6 +3,11 @@ import { FIELDS } from './data'
 import { Form, FormField } from './Common'
 import useForm from './hooks/useForm'
 
+export const TEST_ID = {
+  container: 'container',
+  logoutButton: 'logoutButton'
+}
+
 const Login = ({
   onChange,
   onSubmit,
@@ -71,7 +76,7 @@ const LoginOrRegister = () => {
   })
 
   return (
-    <div>
+    <div data-testid={TEST_ID.container}>
       {page === 'login' && (
         <Login onSubmit={onSubmit} onChange={onChange} onGoto={gotoRegister} />
       )}
@@ -80,8 +85,10 @@ const LoginOrRegister = () => {
       )}
       {page === 'loggedIn' && (
         <div>
-          <div>Logged in</div>
-          <button onClick={gotoLogin}>Logout</button>
+          <div>Logged In</div>
+          <button data-testid={TEST_ID.logoutButton} onClick={gotoLogin}>
+            Logout
+          </button>
         </div>
       )}
     </div>
