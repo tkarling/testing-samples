@@ -24,18 +24,19 @@ const useForm = (
       event.preventDefault()
     }
     callback(inputs)
+    setInputs({})
   }
   const onChange = (event: any) => {
-    const { name = '', value } = event.target ? event.target : event
+    const { name = 'nameNotSet', value } = event.target ? event.target : event
     setInputs((inputs: any) => ({
       ...inputs,
       [name]: value
     }))
   }
   return {
+    inputs,
     onSubmit,
-    onChange,
-    inputs
+    onChange
   }
 }
 export default useForm

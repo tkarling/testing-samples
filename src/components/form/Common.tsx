@@ -12,6 +12,7 @@ export const FormField = ({
   placeholder,
   name,
   type,
+  value = '', // a value always needed to make input controlled
   autoComplete,
   onChange
 }: {
@@ -20,15 +21,18 @@ export const FormField = ({
   placeholder?: string
   name?: string
   type?: string
+  value?: string
   autoComplete?: string
   onChange: Function
 }) => (
   <div className={styles.FormField}>
     <label>{label || id}:</label>
     <input
+      data-testid={id}
       className={styles.FormFieldInput}
       name={name || id}
       type={type}
+      value={value}
       onChange={onChange as any}
       placeholder={placeholder || label || id}
       autoComplete={autoComplete}

@@ -8,46 +8,56 @@ export const TEST_ID = {
   logoutButton: 'logoutButton'
 }
 
-const Login = ({
-  onChange,
-  onSubmit,
-  onGoto
-}: {
-  onChange?: any
-  onSubmit?: any
-  onGoto?: any
-}) => {
+const Login = ({ onGoto, onLogin }: { onGoto?: any; onLogin?: any }) => {
+  const { inputs, onChange, onSubmit } = useForm({
+    callback: onLogin
+  })
+
   return (
     <Form
       onSubmit={onSubmit}
       title="Sign In"
       link={{ label: 'Need an account? Sign Up', onClick: onGoto }}
     >
-      <FormField {...FIELDS.username} onChange={onChange} />
-      <FormField {...FIELDS.password} onChange={onChange} />
+      <FormField
+        {...FIELDS.username}
+        value={inputs.username}
+        onChange={onChange}
+      />
+      <FormField
+        {...FIELDS.password}
+        value={inputs.password}
+        onChange={onChange}
+      />
     </Form>
   )
 }
 
-const Register = ({
-  onChange,
-  onSubmit,
-  onGoto
-}: {
-  onChange?: any
-  onSubmit?: any
-  onGoto?: any
-}) => {
+const Register = ({ onGoto, onLogin }: { onGoto?: any; onLogin?: any }) => {
+  const { inputs, onChange, onSubmit } = useForm({
+    callback: onLogin
+  })
   return (
     <Form
       onSubmit={onSubmit}
       title="Sign Up"
       link={{ label: 'Return to Sign In', onClick: onGoto }}
     >
-      <FormField {...FIELDS.username} autoComplete="off" onChange={onChange} />
-      <FormField {...FIELDS.password} autoComplete="off" onChange={onChange} />
+      <FormField
+        {...FIELDS.username}
+        value={inputs.username}
+        autoComplete="off"
+        onChange={onChange}
+      />
+      <FormField
+        {...FIELDS.password}
+        value={inputs.password}
+        autoComplete="off"
+        onChange={onChange}
+      />
       <FormField
         {...FIELDS.repeatPassword}
+        value={inputs.repeatPassword}
         autoComplete="off"
         onChange={onChange}
       />
@@ -55,42 +65,54 @@ const Register = ({
   )
 }
 
+const LoggedIn = ({ user, logout }: { user: string; logout: any }) => (
+  <div>
+    <div>Logged in as {user}</div>
+    <button data-testid={TEST_ID.logoutButton} onClick={logout}>
+      Logout
+    </button>
+  </div>
+)
+
 const usePage = () => {
+  const [user, setUser] = useState()
   const [page, setPage] = useState('login')
+
   const gotoLogin = useCallback(() => {
     setPage('login')
   }, [])
   const gotoRegister = useCallback(() => {
     setPage('register')
   }, [])
-  const gotoLoggedIn = useCallback(() => {
-    setPage('loggedIn')
+  const login = useCallback(
+    ({ username, password }: { username: string; password: string }) => {
+      if (username && password) {
+        setUser(username)
+        setPage('loggedIn')
+      }
+    },
+    []
+  )
+  const logout = useCallback(() => {
+    setUser(undefined)
+    setPage('login')
   }, [])
-  return { page, gotoLogin, gotoRegister, gotoLoggedIn }
+
+  return { user, page, gotoLogin, gotoRegister, login, logout }
 }
 
 const LoginOrRegister = () => {
-  const { page, gotoLogin, gotoRegister, gotoLoggedIn } = usePage()
-  const { onChange, onSubmit } = useForm({
-    callback: gotoLoggedIn
-  })
+  const { user, page, gotoLogin, gotoRegister, login, logout } = usePage()
 
   return (
     <div data-testid={TEST_ID.container}>
-      {page === 'login' && (
-        <Login onSubmit={onSubmit} onChange={onChange} onGoto={gotoRegister} />
+      {!user && page === 'login' && (
+        <Login onLogin={login} onGoto={gotoRegister} />
       )}
-      {page === 'register' && (
-        <Register onSubmit={onSubmit} onChange={onChange} onGoto={gotoLogin} />
+      {!user && page === 'register' && (
+        <Register onLogin={login} onGoto={gotoLogin} />
       )}
-      {page === 'loggedIn' && (
-        <div>
-          <div>Logged In</div>
-          <button data-testid={TEST_ID.logoutButton} onClick={gotoLogin}>
-            Logout
-          </button>
-        </div>
-      )}
+      {user && <LoggedIn user={user} logout={logout} />}
     </div>
   )
 }

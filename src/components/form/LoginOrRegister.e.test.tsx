@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getText, click, submitForm } from '../../testHelpers.e'
+import { getText, click, setValue, submitForm } from '../../testHelpers.e'
 import { TEST_ID as FORM_TEST_ID } from './Common'
 import LoginOrRegister, { TEST_ID } from './LoginOrRegister'
 
@@ -29,7 +29,7 @@ const expectOnRegisterPage = (wrapper: any) => {
   ])
 }
 const expectOnLoggedInPage = (wrapper: any) => {
-  expectTexts(wrapper, ['Logged In', 'Logout'])
+  expectTexts(wrapper, ['Logged in', 'Logout'])
 }
 
 const setup = () => mount(<LoginOrRegister />)
@@ -69,6 +69,8 @@ describe(LoginOrRegister, () => {
   it('can login', () => {
     expect.assertions(5 + 2)
 
+    setValue(wrapper, 'username', 'tuija')
+    setValue(wrapper, 'password', '123')
     submitForm(wrapper)
     wrapper.update()
     expectOnLoggedInPage(wrapper)
@@ -80,6 +82,9 @@ describe(LoginOrRegister, () => {
     click(wrapper, FORM_TEST_ID.link)
     wrapper.update()
     expectOnRegisterPage(wrapper)
+    setValue(wrapper, 'username', 'tuija')
+    setValue(wrapper, 'password', '123')
+    setValue(wrapper, 'repeatPassword', '123')
 
     submitForm(wrapper)
     wrapper.update()
@@ -89,10 +94,14 @@ describe(LoginOrRegister, () => {
   it('can login and then logout', () => {
     expect.assertions(5 + 2 + 5)
 
+    // login
+    setValue(wrapper, 'username', 'tuija')
+    setValue(wrapper, 'password', '123')
     submitForm(wrapper)
     wrapper.update()
     expectOnLoggedInPage(wrapper)
 
+    // logout
     click(wrapper, TEST_ID.logoutButton)
     wrapper.update()
     expectOnLoginPage(wrapper)
