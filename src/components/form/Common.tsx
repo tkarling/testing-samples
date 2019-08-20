@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import styles from './Login.module.css'
+import styles from './Common.module.css'
 
 export const TEST_ID = {
   link: 'link',
@@ -44,12 +44,14 @@ export const Form = ({
   onSubmit,
   title,
   link,
-  children
+  children,
+  serverError
 }: {
   onSubmit: any
   title: string
   link?: { label: string; onClick: any }
   children: any
+  serverError?: string
 }) => {
   const onSubmitP = useCallback(
     (event: any) => {
@@ -73,6 +75,7 @@ export const Form = ({
         )}
       </div>
       {children}
+      <div className={styles.FormError}>{serverError}</div>
       <button data-testid={TEST_ID.submitButton} className={styles.FormSubmit}>
         Submit
       </button>

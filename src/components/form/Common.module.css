@@ -35,6 +35,13 @@
   text-decoration: underline;
 }
 
+.FormError {
+  color: crimson;
+  padding-top: 10px;
+  font-size: 70%;
+  height: 15px;
+}
+
 .FormSubmit {
   margin: auto;
   margin-top: 10px;

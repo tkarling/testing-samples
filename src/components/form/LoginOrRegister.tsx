@@ -8,7 +8,20 @@ export const TEST_ID = {
   logoutButton: 'logoutButton'
 }
 
-const Login = ({ onGoto, onLogin }: { onGoto?: any; onLogin?: any }) => {
+export const SERVER_ERROR = {
+  usernamePasswordRequired: 'Must have username and password',
+  passwordsMustMatch: 'Password and Repeat Password must match'
+}
+
+const Login = ({
+  onGoto,
+  onLogin,
+  serverError
+}: {
+  onGoto?: any
+  onLogin?: any
+  serverError?: string
+}) => {
   const { inputs, onChange, onSubmit } = useForm({
     callback: onLogin
   })
@@ -18,6 +31,7 @@ const Login = ({ onGoto, onLogin }: { onGoto?: any; onLogin?: any }) => {
       onSubmit={onSubmit}
       title="Sign In"
       link={{ label: 'Need an account? Sign Up', onClick: onGoto }}
+      serverError={serverError}
     >
       <FormField
         {...FIELDS.username}
@@ -33,15 +47,24 @@ const Login = ({ onGoto, onLogin }: { onGoto?: any; onLogin?: any }) => {
   )
 }
 
-const Register = ({ onGoto, onLogin }: { onGoto?: any; onLogin?: any }) => {
+const Register = ({
+  onGoto,
+  onRegister,
+  serverError
+}: {
+  onGoto?: any
+  onRegister?: any
+  serverError?: string
+}) => {
   const { inputs, onChange, onSubmit } = useForm({
-    callback: onLogin
+    callback: onRegister
   })
   return (
     <Form
       onSubmit={onSubmit}
       title="Sign Up"
       link={{ label: 'Return to Sign In', onClick: onGoto }}
+      serverError={serverError}
     >
       <FormField
         {...FIELDS.username}
@@ -77,12 +100,15 @@ const LoggedIn = ({ user, logout }: { user: string; logout: any }) => (
 const usePage = () => {
   const [user, setUser] = useState()
   const [page, setPage] = useState('login')
+  const [serverError, setServerError] = useState('')
 
   const gotoLogin = () => {
     setPage('login')
+    setServerError('')
   }
   const gotoRegister = () => {
     setPage('register')
+    setServerError('')
   }
   const login = ({
     username,
@@ -94,26 +120,72 @@ const usePage = () => {
     if (username && password) {
       setUser(username)
       setPage('loggedIn')
+      setServerError('')
+      return true
+    } else {
+      setServerError(SERVER_ERROR.usernamePasswordRequired)
+      return false
     }
+  }
+  const register = ({
+    username,
+    password,
+    repeatPassword
+  }: {
+    username: string
+    password: string
+    repeatPassword: string
+  }) => {
+    if (!repeatPassword || repeatPassword !== password) {
+      setServerError(SERVER_ERROR.passwordsMustMatch)
+      return false
+    }
+    return login({ username, password })
   }
   const logout = () => {
     setUser(undefined)
     setPage('login')
   }
 
-  return { user, page, gotoLogin, gotoRegister, login, logout }
+  return {
+    user,
+    page,
+    serverError,
+    gotoLogin,
+    gotoRegister,
+    login,
+    register,
+    logout
+  }
 }
 
 const LoginOrRegister = () => {
-  const { user, page, gotoLogin, gotoRegister, login, logout } = usePage()
+  const {
+    user,
+    page,
+    serverError,
+    gotoLogin,
+    gotoRegister,
+    login,
+    register,
+    logout
+  } = usePage()
 
   return (
     <div data-testid={TEST_ID.container}>
       {!user && page === 'login' && (
-        <Login onLogin={login} onGoto={gotoRegister} />
+        <Login
+          onLogin={login}
+          onGoto={gotoRegister}
+          serverError={serverError}
+        />
       )}
       {!user && page === 'register' && (
-        <Register onLogin={login} onGoto={gotoLogin} />
+        <Register
+          onRegister={register}
+          onGoto={gotoLogin}
+          serverError={serverError}
+        />
       )}
       {user && <LoggedIn user={user} logout={logout} />}
     </div>
