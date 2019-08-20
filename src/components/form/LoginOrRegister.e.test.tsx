@@ -4,6 +4,9 @@ import { getText, click, setValue, submitForm } from '../../testHelpers.e'
 import { TEST_ID as FORM_TEST_ID } from './Common'
 import LoginOrRegister, { TEST_ID } from './LoginOrRegister'
 
+const USERNAME = 'tuija'
+const PASSWORD = '123'
+
 const expectTexts = (wrapper: any, texts: string[]) => {
   texts.forEach(text =>
     expect(getText(wrapper, TEST_ID.container)).toContain(text)
@@ -29,7 +32,7 @@ const expectOnRegisterPage = (wrapper: any) => {
   ])
 }
 const expectOnLoggedInPage = (wrapper: any) => {
-  expectTexts(wrapper, ['Logged in', 'Logout'])
+  expectTexts(wrapper, ['Logged in', 'Logout', USERNAME])
 }
 
 const setup = () => mount(<LoginOrRegister />)
@@ -67,24 +70,24 @@ describe(LoginOrRegister, () => {
 
   // TODO: input fields
   it('can login', () => {
-    expect.assertions(5 + 2)
+    expect.assertions(5 + 3)
 
-    setValue(wrapper, 'username', 'tuija')
-    setValue(wrapper, 'password', '123')
+    setValue(wrapper, 'username', USERNAME)
+    setValue(wrapper, 'password', PASSWORD)
     submitForm(wrapper)
     wrapper.update()
     expectOnLoggedInPage(wrapper)
   })
 
   it('can register', () => {
-    expect.assertions(5 + 6 + 2)
+    expect.assertions(5 + 6 + 3)
 
     click(wrapper, FORM_TEST_ID.link)
     wrapper.update()
     expectOnRegisterPage(wrapper)
-    setValue(wrapper, 'username', 'tuija')
-    setValue(wrapper, 'password', '123')
-    setValue(wrapper, 'repeatPassword', '123')
+    setValue(wrapper, 'username', USERNAME)
+    setValue(wrapper, 'password', PASSWORD)
+    setValue(wrapper, 'repeatPassword', PASSWORD)
 
     submitForm(wrapper)
     wrapper.update()
@@ -92,11 +95,11 @@ describe(LoginOrRegister, () => {
   })
 
   it('can login and then logout', () => {
-    expect.assertions(5 + 2 + 5)
+    expect.assertions(5 + 3 + 5)
 
     // login
-    setValue(wrapper, 'username', 'tuija')
-    setValue(wrapper, 'password', '123')
+    setValue(wrapper, 'username', USERNAME)
+    setValue(wrapper, 'password', PASSWORD)
     submitForm(wrapper)
     wrapper.update()
     expectOnLoggedInPage(wrapper)

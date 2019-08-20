@@ -78,25 +78,28 @@ const usePage = () => {
   const [user, setUser] = useState()
   const [page, setPage] = useState('login')
 
-  const gotoLogin = useCallback(() => {
+  const gotoLogin = () => {
     setPage('login')
-  }, [])
-  const gotoRegister = useCallback(() => {
+  }
+  const gotoRegister = () => {
     setPage('register')
-  }, [])
-  const login = useCallback(
-    ({ username, password }: { username: string; password: string }) => {
-      if (username && password) {
-        setUser(username)
-        setPage('loggedIn')
-      }
-    },
-    []
-  )
-  const logout = useCallback(() => {
+  }
+  const login = ({
+    username,
+    password
+  }: {
+    username: string
+    password: string
+  }) => {
+    if (username && password) {
+      setUser(username)
+      setPage('loggedIn')
+    }
+  }
+  const logout = () => {
     setUser(undefined)
     setPage('login')
-  }, [])
+  }
 
   return { user, page, gotoLogin, gotoRegister, login, logout }
 }
