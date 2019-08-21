@@ -3,12 +3,16 @@ import { FIELDS } from './data'
 import { Form, FormField } from './Common'
 import useForm from './hooks/useForm'
 
+export const VALID_USERNAME = 'valid'
+export const VALID_PASSWORD = 'password1'
+
 export const TEST_ID = {
   container: 'container',
   logoutButton: 'logoutButton'
 }
 
 export const SERVER_ERROR = {
+  cannotAuthenticate: 'Cannot authenticate',
   usernamePasswordRequired: 'Must have username and password',
   passwordsMustMatch: 'Password and Repeat Password must match'
 }
@@ -110,6 +114,11 @@ const usePage = () => {
     setPage('register')
     setServerError('')
   }
+  const successfulLogin = ({ username }: { username: string }) => {
+    setUser(username)
+    setPage('loggedIn')
+    setServerError('')
+  }
   const login = ({
     username,
     password
@@ -117,14 +126,12 @@ const usePage = () => {
     username: string
     password: string
   }) => {
-    if (username && password) {
-      setUser(username)
-      setPage('loggedIn')
-      setServerError('')
-      return true
-    } else {
-      setServerError(SERVER_ERROR.usernamePasswordRequired)
+    if (username !== VALID_USERNAME || password !== VALID_PASSWORD) {
+      setServerError(SERVER_ERROR.cannotAuthenticate)
       return false
+    } else {
+      successfulLogin({ username })
+      return true
     }
   }
   const register = ({
@@ -139,14 +146,18 @@ const usePage = () => {
     if (!repeatPassword || repeatPassword !== password) {
       setServerError(SERVER_ERROR.passwordsMustMatch)
       return false
+    } else if (!username || !password) {
+      setServerError(SERVER_ERROR.usernamePasswordRequired)
+      return false
+    } else {
+      successfulLogin({ username })
+      return true
     }
-    return login({ username, password })
   }
   const logout = () => {
     setUser(undefined)
     setPage('login')
   }
-
   return {
     user,
     page,
