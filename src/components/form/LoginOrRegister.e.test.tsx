@@ -2,13 +2,8 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { getText, click, setValue, submitForm } from '../../testHelpers.e'
 import { TEST_ID as FORM_TEST_ID } from './Common'
-import LoginOrRegister, {
-  TEST_ID,
-  SERVER_ERROR,
-  VALID_USERNAME,
-  VALID_PASSWORD
-} from './LoginOrRegister'
-
+import LoginOrRegister, { TEST_ID } from './LoginOrRegister'
+import { SERVER_ERROR, VALID_USERNAME, VALID_PASSWORD } from './reducers/login'
 const expectTexts = (wrapper: any, texts: string[]) => {
   texts.forEach(text =>
     expect(getText(wrapper, TEST_ID.container)).toContain(text)

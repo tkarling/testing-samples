@@ -1,20 +1,12 @@
-import React, { useState, useCallback } from 'react'
+import React, { useReducer } from 'react'
 import { FIELDS } from './data'
 import { Form, FormField } from './Common'
 import useForm from './hooks/useForm'
-
-export const VALID_USERNAME = 'valid'
-export const VALID_PASSWORD = 'password1'
+import loginReducer, { ACTION } from './reducers/login'
 
 export const TEST_ID = {
   container: 'container',
   logoutButton: 'logoutButton'
-}
-
-export const SERVER_ERROR = {
-  cannotAuthenticate: 'Cannot authenticate',
-  usernamePasswordRequired: 'Must have username and password',
-  passwordsMustMatch: 'Password and Repeat Password must match'
 }
 
 const Login = ({
@@ -101,39 +93,20 @@ const LoggedIn = ({ user, logout }: { user: string; logout: any }) => (
   </div>
 )
 
-const usePage = () => {
-  const [user, setUser] = useState()
-  const [page, setPage] = useState('login')
-  const [serverError, setServerError] = useState('')
+const LoginOrRegister = () => {
+  const [{ user, page, serverError }, dispatch] = useReducer(loginReducer, {
+    user: '',
+    page: 'login',
+    serverError: ''
+  } as never)
 
-  const gotoLogin = () => {
-    setPage('login')
-    setServerError('')
-  }
-  const gotoRegister = () => {
-    setPage('register')
-    setServerError('')
-  }
-  const successfulLogin = ({ username }: { username: string }) => {
-    setUser(username)
-    setPage('loggedIn')
-    setServerError('')
-  }
   const login = ({
     username,
     password
   }: {
     username: string
     password: string
-  }) => {
-    if (username !== VALID_USERNAME || password !== VALID_PASSWORD) {
-      setServerError(SERVER_ERROR.cannotAuthenticate)
-      return false
-    } else {
-      successfulLogin({ username })
-      return true
-    }
-  }
+  }) => dispatch({ type: ACTION.login, username, password })
   const register = ({
     username,
     password,
@@ -142,63 +115,30 @@ const usePage = () => {
     username: string
     password: string
     repeatPassword: string
-  }) => {
-    if (!repeatPassword || repeatPassword !== password) {
-      setServerError(SERVER_ERROR.passwordsMustMatch)
-      return false
-    } else if (!username || !password) {
-      setServerError(SERVER_ERROR.usernamePasswordRequired)
-      return false
-    } else {
-      successfulLogin({ username })
-      return true
-    }
-  }
-  const logout = () => {
-    setUser(undefined)
-    setPage('login')
-  }
-  return {
-    user,
-    page,
-    serverError,
-    gotoLogin,
-    gotoRegister,
-    login,
-    register,
-    logout
-  }
-}
-
-const LoginOrRegister = () => {
-  const {
-    user,
-    page,
-    serverError,
-    gotoLogin,
-    gotoRegister,
-    login,
-    register,
-    logout
-  } = usePage()
+  }) => dispatch({ type: ACTION.register, username, password, repeatPassword })
 
   return (
     <div data-testid={TEST_ID.container}>
       {!user && page === 'login' && (
         <Login
           onLogin={login}
-          onGoto={gotoRegister}
+          onGoto={() => dispatch({ type: ACTION.gotoRegister })}
           serverError={serverError}
         />
       )}
       {!user && page === 'register' && (
         <Register
           onRegister={register}
-          onGoto={gotoLogin}
+          onGoto={() => dispatch({ type: ACTION.gotoLogin })}
           serverError={serverError}
         />
       )}
-      {user && <LoggedIn user={user} logout={logout} />}
+      {user && (
+        <LoggedIn
+          user={user}
+          logout={() => dispatch({ type: ACTION.logout })}
+        />
+      )}
     </div>
   )
 }
