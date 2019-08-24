@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const noop = (what = 'submit') => (inputs: any) => {
   console.log(what + ' called with:', inputs)
-  return {}
+  return Promise.resolve({})
 }
 
 const useForm = (
@@ -18,12 +18,13 @@ const useForm = (
   }
 ) => {
   const [inputs, setInputs] = useState(initialValues)
+  const [serverError, setServerError] = useState('')
 
   const onSubmit = (event: any) => {
     if (event && event.preventDefault) {
       event.preventDefault()
     }
-    callback(inputs)
+    callback(inputs).catch((error: Error) => setServerError(error.message))
   }
   const onChange = (event: any) => {
     const { name = 'nameNotSet', value } = event.target ? event.target : event
@@ -34,6 +35,7 @@ const useForm = (
   }
   return {
     inputs,
+    serverError,
     onSubmit,
     onChange
   }

@@ -3,22 +3,14 @@ import { FIELDS } from './data'
 import { Form, FormField } from './Common'
 import useForm from './hooks/useForm'
 import loginReducer, { ACTION } from './reducers/login'
-
+import { api1 as api } from '../../api/loginService'
 export const TEST_ID = {
   container: 'container',
   logoutButton: 'logoutButton'
 }
 
-const Login = ({
-  onGoto,
-  onLogin,
-  serverError
-}: {
-  onGoto?: any
-  onLogin?: any
-  serverError?: string
-}) => {
-  const { inputs, onChange, onSubmit } = useForm({
+const Login = ({ onGoto, onLogin }: { onGoto?: any; onLogin?: any }) => {
+  const { inputs, serverError, onChange, onSubmit } = useForm({
     callback: onLogin
   })
 
@@ -45,14 +37,12 @@ const Login = ({
 
 const Register = ({
   onGoto,
-  onRegister,
-  serverError
+  onRegister
 }: {
   onGoto?: any
   onRegister?: any
-  serverError?: string
 }) => {
-  const { inputs, onChange, onSubmit } = useForm({
+  const { inputs, serverError, onChange, onSubmit } = useForm({
     callback: onRegister
   })
   return (
@@ -94,10 +84,9 @@ const LoggedIn = ({ user, logout }: { user: string; logout: any }) => (
 )
 
 const LoginOrRegister = () => {
-  const [{ user, page, serverError }, dispatch] = useReducer(loginReducer, {
+  const [{ user, page }, dispatch] = useReducer(loginReducer, {
     user: '',
-    page: 'login',
-    serverError: ''
+    page: 'login'
   } as never)
 
   const login = ({
@@ -106,7 +95,10 @@ const LoginOrRegister = () => {
   }: {
     username: string
     password: string
-  }) => dispatch({ type: ACTION.login, username, password })
+  }) =>
+    api.login(username, password).then(() => {
+      dispatch({ type: ACTION.login, username })
+    })
   const register = ({
     username,
     password,
@@ -115,7 +107,10 @@ const LoginOrRegister = () => {
     username: string
     password: string
     repeatPassword: string
-  }) => dispatch({ type: ACTION.register, username, password, repeatPassword })
+  }) =>
+    api.register(username, password, repeatPassword).then(() => {
+      dispatch({ type: ACTION.login, username })
+    })
 
   return (
     <div data-testid={TEST_ID.container}>
@@ -123,14 +118,12 @@ const LoginOrRegister = () => {
         <Login
           onLogin={login}
           onGoto={() => dispatch({ type: ACTION.gotoRegister })}
-          serverError={serverError}
         />
       )}
       {!user && page === 'register' && (
         <Register
           onRegister={register}
           onGoto={() => dispatch({ type: ACTION.gotoLogin })}
-          serverError={serverError}
         />
       )}
       {user && (
