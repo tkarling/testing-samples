@@ -1,7 +1,7 @@
 import React, { useReducer } from 'react'
 import { FIELDS } from './data'
-import { Form, FormField } from './Common'
-import useForm from './hooks/useForm'
+import { Form, FormField } from '../../components/Form'
+import useForm from '../../hooks/useForm'
 import loginReducer, { ACTION } from './reducers/login'
 import { api1 as api } from '../../api/loginService'
 export const TEST_ID = {

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 
-import styles from './Common.module.css'
+import styles from './Form.module.css'
 
 export const TEST_ID = {
   link: 'link',

@@ -1,14 +1,16 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './App.css'
 
-import Basic from './components/Basic'
-import WithState from './components/WithState/WithState'
-import WithAsyncState from './components/WithState/WithAsyncState'
-import WithContextAsyncState from './components/WithState/WithContextAsyncState'
-import WithReducer from './components/WithReducer/WithReducer'
-import WithAsyncReducer from './components/WithReducer/WithAsyncReducer'
-import WithContextAsyncReducer from './components/WithReducer/WithContextAsyncReducer'
-import LoginOrRegisterForm from './components/form/LoginOrRegister'
+import Basic from './main/Basic'
+import WithState from './main/WithState/WithState'
+import WithAsyncState from './main/WithState/WithAsyncState'
+import WithContextAsyncState from './main/WithState/WithContextAsyncState'
+import WithReducer from './main/WithReducer/WithReducer'
+import WithAsyncReducer from './main/WithReducer/WithAsyncReducer'
+import WithContextAsyncReducer from './main/WithReducer/WithContextAsyncReducer'
+import Form from './examples/loginForm/LoginOrRegister'
+
+import LoginOrRegisterForm from './main/form/LoginOrRegister'
 
 const Row = ({ children }: { children: any }) => (
   <div className="AppRow">{children}</div>
@@ -18,21 +20,43 @@ const Widget = ({ children }: { children: any }) => (
 )
 const widget = (component: any) => <Widget>{component}</Widget>
 
+const Examples: React.FC = () => (
+  <div>
+    <Row>{widget(<LoginOrRegisterForm />)}</Row>
+  </div>
+)
+
+const Main: React.FC = () => (
+  <div>
+    <Basic />
+    <Row>
+      {widget(<WithState />)}
+      {widget(<WithAsyncState />)}
+      {widget(<WithContextAsyncState />)}
+    </Row>
+    <Row>{widget(<Form />)}</Row>
+    <Row>
+      {widget(<WithReducer />)}
+      {widget(<WithAsyncReducer />)}
+      {widget(<WithContextAsyncReducer />)}
+    </Row>
+  </div>
+)
+
 const App: React.FC = () => {
+  const [page, setPage] = useState('main')
+  const onClick = () => {
+    setPage(page === 'main' ? 'examples' : 'main')
+  }
+
   return (
     <div className="App">
-      <Basic />
       <Row>
-        {widget(<WithState />)}
-        {widget(<WithAsyncState />)}
-        {widget(<WithContextAsyncState />)}
+        <button onClick={onClick}>Examples</button>
       </Row>
-      <Row>{widget(<LoginOrRegisterForm />)}</Row>
-      <Row>
-        {widget(<WithReducer />)}
-        {widget(<WithAsyncReducer />)}
-        {widget(<WithContextAsyncReducer />)}
-      </Row>
+
+      {page === 'main' && <Main />}
+      {page === 'examples' && <Examples />}
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { getText, click, setValue, submitForm } from '../../testHelpers.e'
-import { TEST_ID as FORM_TEST_ID } from './Common'
+import { TEST_ID as FORM_TEST_ID } from '../../components/Form'
 import LoginOrRegister, { TEST_ID } from './LoginOrRegister'
 import { SERVER_ERROR as mockServerError, VALID } from '../../api/constants'
 
