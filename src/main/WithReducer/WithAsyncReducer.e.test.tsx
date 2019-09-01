@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { getElement, getText, click, toggleCheck } from '../../testHelpers.e'
-import { TEXT, TEST_ID } from './Common'
+import { TEXT, TEST_ID } from './components/Common'
 import WithAsyncReducer from './WithAsyncReducer'
 import WithContextAsyncReducer from './WithContextAsyncReducer'
 

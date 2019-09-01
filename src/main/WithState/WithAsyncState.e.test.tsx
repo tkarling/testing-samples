@@ -2,7 +2,7 @@ import React from 'react'
 import { mount } from 'enzyme'
 import { getElement, getText, click } from '../../testHelpers.e'
 import WithAsyncState from './WithAsyncState'
-import WithContextAsyncState from './WithContextAsyncState'
+import WithContextAsyncState from './WithContextAsyncStateProvider'
 
 const mockExpectedCounter = 6
 jest.mock('../../api/service', () => {

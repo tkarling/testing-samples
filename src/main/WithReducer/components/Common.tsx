@@ -17,8 +17,8 @@ export const Row = ({ children }: { children: any }) => (
   <div className={styles.Row}>{children}</div>
 )
 
-export const TodoList = ({ children }: { children: any }) => (
-  <div className={styles.TodoList}>{children}</div>
+export const List = ({ children }: { children: any }) => (
+  <div className={styles.List}>{children}</div>
 )
 
 export const Todo = ({ children }: { children: any }) => (

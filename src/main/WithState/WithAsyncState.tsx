@@ -1,5 +1,7 @@
 import React from 'react'
-import { Counter, useCounter } from './Common'
+
+import useCounter from './hooks/useCounter'
+import Counter from './components/Counter'
 
 const WithAsyncState = () => {
   const { counter, increment } = useCounter()

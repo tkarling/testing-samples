@@ -1,14 +1,14 @@
 import React, { useContext } from 'react'
 import { ACTION, useAsyncTodos2 as useAsyncTodos } from './hooks/useAsyncTodos'
-import * as Widget from './Common'
-import { TEST_ID } from './Common'
+import * as Widget from './components/Common'
+import { TEST_ID } from './components/Common'
 
 const TodoList = () => {
   const { todos } = useContext(TodosContext)
   const { dispatch } = useContext(ActionContext)
 
   return (
-    <Widget.TodoList>
+    <Widget.List>
       <Widget.Row>
         <Widget.AddButton dispatch={dispatch} type={ACTION.startAdd} />
       </Widget.Row>
@@ -30,7 +30,7 @@ const TodoList = () => {
           </Widget.Todo>
         </Widget.Row>
       ))}
-    </Widget.TodoList>
+    </Widget.List>
   )
 }
 

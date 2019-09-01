@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { getElement, getText, click, toggleCheck } from '../../testHelpers.e'
-import { TEXT, TEST_ID } from './Common'
+import { TEXT, TEST_ID } from './components/Common'
 import WithReducer from './WithReducer'
 
 const setup = () => mount(<WithReducer />)

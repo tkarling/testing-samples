@@ -3,7 +3,7 @@ import Basic from './Basic'
 
 import ReactDOM from 'react-dom'
 
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 
 import { render } from '@testing-library/react'
 
@@ -15,7 +15,7 @@ describe('Basic', () => {
   })
 
   it('renders without crashing enzyme', () => {
-    const wrapper = shallow(<Basic />)
+    const wrapper = mount(<Basic />)
     expect(wrapper).toHaveText('Hello')
   })
 
