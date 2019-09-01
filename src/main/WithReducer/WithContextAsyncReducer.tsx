@@ -46,7 +46,7 @@ const WithContextAsyncReducer = () => {
       <TodosContext.Provider value={{ todos, isLoading }}>
         <div data-testid={TEST_ID.container}>
           <h4>With Context Async Reducer</h4>
-          {isLoading && <div>Loading...</div>}
+          {isLoading && <div>Spinning...</div>}
           {!isLoading && <TodoList />}
         </div>
       </TodosContext.Provider>

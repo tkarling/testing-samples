@@ -35,7 +35,7 @@ const WithAsyncReducer = () => {
   return (
     <div data-testid={TEST_ID.container}>
       <h4>With Async Reducer</h4>
-      {isLoading && <div>Loading...</div>}
+      {isLoading && <div>Spinning...</div>}
       {!isLoading && <TodoList todos={todos} dispatch={dispatch} />}
     </div>
   )

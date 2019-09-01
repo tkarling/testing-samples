@@ -17,10 +17,21 @@ export const FETCHED_TODOS: Todo[] = [
   }
 ]
 export class serviceApi {
+  counter = FETCHED_COUNTER
+  // needed for unit testing
+  resetCounter = () => {
+    this.counter = FETCHED_COUNTER
+  }
+
+  getCounter = () => stall().then(() => this.counter)
+  setCounter = (counter: number) =>
+    stall().then(() => {
+      this.counter = counter
+      console.log('setting', this.counter)
+      return this.counter
+    })
+
   todos = FETCHED_TODOS
-
-  getCounter = () => stall().then(() => FETCHED_COUNTER)
-
   // needed for unit testing
   resetTodos = () => {
     this.todos = FETCHED_TODOS

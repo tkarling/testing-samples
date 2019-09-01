@@ -52,10 +52,10 @@ const expectToContain = (wrapper: any, texts: string[]) =>
       )
     )
   describe(componentName, () => {
-    it('renders Loading before fetch', () => {
+    it('renders Spinning before fetch', () => {
       expect.assertions(1)
       const wrapper = setup()
-      expect(getText(wrapper, TEST_ID.container)).toContain('Loading')
+      expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
     })
 
     describe('After initial Fetch', () => {
@@ -73,7 +73,7 @@ const expectToContain = (wrapper: any, texts: string[]) =>
       it('can add Item', async () => {
         expect.assertions(3)
         click(wrapper, TEST_ID.addButton)
-        expect(getText(wrapper, TEST_ID.container)).toContain('Loading')
+        expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
         await wrapper.update()
         expectToContain(wrapper, mockTodosAfterAdd.map(item => item.title))
       })
@@ -84,14 +84,14 @@ const expectToContain = (wrapper: any, texts: string[]) =>
 
         // toggle completed to true
         toggleCheck(wrapper, TEST_ID.toggleCheck)
-        expect(getText(wrapper, TEST_ID.container)).toContain('Loading')
+        expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
         await wrapper.update()
         await wrapper.update()
         expect(getElement(wrapper, TEST_ID.toggleCheck)).toBeChecked()
 
         // toggle completed back to false
         toggleCheck(wrapper, TEST_ID.toggleCheck)
-        expect(getText(wrapper, TEST_ID.container)).toContain('Loading')
+        expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
         await wrapper.update()
         expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
       })
@@ -99,7 +99,7 @@ const expectToContain = (wrapper: any, texts: string[]) =>
       it('can delete Item', async () => {
         expect.assertions(2)
         click(wrapper, TEST_ID.deleteButton)
-        expect(getText(wrapper, TEST_ID.container)).toContain('Loading')
+        expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
         await wrapper.update()
         expect(getText(wrapper, TEST_ID.container)).toContain(TEXT.noItems)
       })

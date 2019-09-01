@@ -7,8 +7,14 @@ import WithContextAsyncState from './WithContextAsyncStateProvider'
 const mockExpectedCounter = 6
 jest.mock('../../api/service', () => {
   return {
-    api1: { getCounter: jest.fn(() => Promise.resolve(mockExpectedCounter)) },
-    api2: { getCounter: jest.fn(() => Promise.resolve(mockExpectedCounter)) }
+    api1: {
+      getCounter: jest.fn(() => Promise.resolve(mockExpectedCounter)),
+      setCounter: jest.fn(counter => Promise.resolve(counter))
+    },
+    api2: {
+      getCounter: jest.fn(() => Promise.resolve(mockExpectedCounter)),
+      setCounter: jest.fn(counter => Promise.resolve(counter))
+    }
   }
 })
 ;['WithAsyncState', 'WithContextAsyncState'].forEach(componentName => {
@@ -21,27 +27,33 @@ jest.mock('../../api/service', () => {
       )
     )
   describe(componentName, () => {
+    const containerId = 'container'
     const counterId = 'counter'
-    const loadingId = 'loading'
 
-    it('renders Loading before fetch', () => {
+    it('renders Spinning before fetch', () => {
       expect.assertions(2)
       const wrapper = setup()
-      expect(getText(wrapper, loadingId)).toContain('Loading')
+      expect(getText(wrapper, containerId)).toContain('Spinning')
       expect(getElement(wrapper, counterId)).not.toExist()
     })
 
     it('renders async counter', async () => {
       expect.assertions(1)
-      const wrapper = await setup()
+      const wrapper = setup()
+      await wrapper.update()
       await wrapper.update()
       expect(getText(wrapper, counterId)).toContain(mockExpectedCounter)
     })
 
     it('can increment', async () => {
-      const wrapper = await setup()
+      const wrapper = setup()
       await wrapper.update()
+      await wrapper.update()
+
       click(wrapper, counterId)
+      expect(getText(wrapper, containerId)).toContain('Spinning')
+
+      await wrapper.update()
       await wrapper.update()
       expect(getText(wrapper, counterId)).toContain(mockExpectedCounter + 1)
     })

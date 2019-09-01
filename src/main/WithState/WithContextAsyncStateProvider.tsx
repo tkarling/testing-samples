@@ -5,14 +5,16 @@ import useCounter from './hooks/useCounter'
 import WithAsyncConsumer from './WithContextAsyncStateConsumer'
 
 const WithAsyncProvider = () => {
-  const { counter, increment } = useCounter()
+  const { counter, increment, loading } = useCounter()
 
   return (
-    <ActionContext.Provider value={{ increment }}>
-      <CounterContext.Provider value={counter}>
-        <WithAsyncConsumer />
-      </CounterContext.Provider>
-    </ActionContext.Provider>
+    <div data-testid="container">
+      <ActionContext.Provider value={{ increment }}>
+        <CounterContext.Provider value={{ counter, loading }}>
+          <WithAsyncConsumer />
+        </CounterContext.Provider>
+      </ActionContext.Provider>
+    </div>
   )
 }
 

@@ -4,10 +4,17 @@ import useCounter from './hooks/useCounter'
 import Counter from './components/Counter'
 
 const WithAsyncState = () => {
-  const { counter, increment } = useCounter()
+  const { counter, increment, loading } = useCounter()
 
   return (
-    <Counter title="Async Counter" counter={counter} increment={increment} />
+    <div data-testid="container">
+      <Counter
+        title="Async Counter"
+        counter={counter}
+        increment={increment}
+        loading={loading}
+      />
+    </div>
   )
 }
 

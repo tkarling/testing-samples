@@ -11,9 +11,9 @@ describe('WithAsyncState', () => {
   })
 
   describe('find by text', () => {
-    it('renders Loading before fetch', () => {
+    it('renders Spinning before fetch', () => {
       const { getByText, queryByText } = setup()
-      expect(getByText(/Loading/).textContent).toContain('Loading')
+      expect(getByText(/Spinning/).textContent).toContain('Spinning')
       expect(queryByText(/Counter/)).toBeNull()
     })
 
@@ -21,7 +21,7 @@ describe('WithAsyncState', () => {
       const { getByText, queryByText } = setup()
       const counterEl = await waitForElement(() => getByText(/Counter/))
       expect(counterEl.textContent).toContain(EXPECTED_COUNTER)
-      expect(queryByText(/Loading/)).toBeNull()
+      expect(queryByText(/Spinning/)).toBeNull()
     })
 
     it('renders async counter after fetch w custom counter', async () => {
@@ -38,9 +38,9 @@ describe('WithAsyncState', () => {
     const loadingId = 'loading'
     const counterId = 'counter'
 
-    it('renders Loading before fetch', () => {
+    it('renders Spinning before fetch', () => {
       const { getByTestId, queryByTestId } = setup()
-      expect(getByTestId(loadingId)).toHaveTextContent('Loading...')
+      expect(getByTestId(loadingId)).toHaveTextContent('Spinning...')
       expect(queryByTestId(counterId)).toBeNull()
     })
 
