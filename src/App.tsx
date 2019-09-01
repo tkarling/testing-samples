@@ -8,9 +8,9 @@ import WithContextAsyncState from './main/WithState/WithContextAsyncState'
 import WithReducer from './main/WithReducer/WithReducer'
 import WithAsyncReducer from './main/WithReducer/WithAsyncReducer'
 import WithContextAsyncReducer from './main/WithReducer/WithContextAsyncReducer'
-import Form from './examples/loginForm/LoginOrRegister'
+import Form from './main/form/AddTodo'
 
-import LoginOrRegisterForm from './main/form/LoginOrRegister'
+import LoginOrRegisterForm from './examples/loginForm/LoginOrRegister'
 
 const Row = ({ children }: { children: any }) => (
   <div className="AppRow">{children}</div>

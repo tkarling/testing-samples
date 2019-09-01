@@ -70,13 +70,13 @@ describe(LoginOrRegister, () => {
       gotoToRegisterPage(wrapper)
     })
 
-    it('can go to register page and return to login page', () => {
+    it('can go to register page and return to login page', async () => {
       expect.assertions(5 + 6 + 5)
 
       gotoToRegisterPage(wrapper)
 
       click(wrapper, FORM_TEST_ID.link)
-      wrapper.update()
+      await wrapper.update()
       expectOnLoginPage(wrapper)
     })
   })
@@ -126,6 +126,7 @@ describe(LoginOrRegister, () => {
   describe('server errors', () => {
     const submitToSeeError = async (error: string) => {
       submitForm(wrapper)
+      await wrapper.update()
       await wrapper.update()
       await wrapper.update()
       expectTexts(wrapper, [error])

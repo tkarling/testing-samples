@@ -24,7 +24,9 @@ const useForm = (
     if (event && event.preventDefault) {
       event.preventDefault()
     }
-    callback(inputs).catch((error: Error) => setServerError(error.message))
+    callback(inputs)
+      .then(setInputs(initialValues))
+      .catch((error: Error) => setServerError(error.message))
   }
   const onChange = (event: any) => {
     const { name = 'nameNotSet', value } = event.target ? event.target : event
