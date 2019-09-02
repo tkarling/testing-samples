@@ -5,8 +5,16 @@
   padding-top: 5px;
 }
 
-.FormFieldInput {
-  flex-basis: 50%;
+.FormRow {
+  display: flex;
+  align-items: center;
+}
+
+.FormColumn {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0px 5px;
 }
 
 .Form {
@@ -47,5 +55,15 @@
   margin-top: 10px;
   padding: 5px;
   width: 50%;
+  border: 1px solid cornflowerblue;
+}
+
+.FormButton {
+  flex-basis: 50px;
+}
+
+.FormEdit {
+  padding: 5px;
+  width: 20px;
   border: 1px solid cornflowerblue;
 }

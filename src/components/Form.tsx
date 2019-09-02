@@ -4,7 +4,8 @@ import styles from './Form.module.css'
 
 export const TEST_ID = {
   link: 'link',
-  submitButton: 'submitButton'
+  submitButton: 'submitButton',
+  editButton: 'editButton'
 }
 export const FormField = ({
   id,
@@ -14,7 +15,9 @@ export const FormField = ({
   type,
   value = '', // a value always needed to make input controlled
   autoComplete,
-  onChange
+  onChange,
+  showLabel = true,
+  editing = true
 }: {
   id: string
   label?: string
@@ -24,20 +27,33 @@ export const FormField = ({
   value?: string
   autoComplete?: string
   onChange: Function
+  showLabel?: boolean
+  editing?: boolean
 }) => (
   <div className={styles.FormField}>
-    <label>{label || id}:</label>
-    <input
-      data-testid={id}
-      className={styles.FormFieldInput}
-      name={name || id}
-      type={type}
-      value={value}
-      onChange={onChange as any}
-      placeholder={placeholder || label || id}
-      autoComplete={autoComplete}
-    />
+    {showLabel && <label>{label || id}:</label>}
+    {editing && (
+      <input
+        data-testid={id}
+        style={showLabel ? { minWidth: '60%' } : { minWidth: '100%' }}
+        name={name || id}
+        type={type}
+        value={value}
+        onChange={onChange as any}
+        placeholder={placeholder || label || id}
+        autoComplete={autoComplete}
+      />
+    )}
+    {!editing && <div>{value}</div>}
   </div>
+)
+
+export const FormRow = ({ children }: { children: any }) => (
+  <div className={styles.FormRow}>{children}</div>
+)
+
+export const FormColumn = ({ children }: { children: any }) => (
+  <div className={styles.FormColumn}>{children}</div>
 )
 
 export const Form = ({
@@ -48,7 +64,7 @@ export const Form = ({
   serverError
 }: {
   onSubmit: any
-  title: string
+  title?: string
   link?: { label: string; onClick: any }
   children: any
   serverError?: string
@@ -56,7 +72,9 @@ export const Form = ({
   const onSubmitP = useCallback(
     (event: any) => {
       event.preventDefault()
-      onSubmit(event)
+      onSubmit(event).catch(() => {
+        /**noop, erro already shown */
+      })
     },
     [onSubmit]
   )
@@ -80,5 +98,48 @@ export const Form = ({
         Submit
       </button>
     </form>
+  )
+}
+
+export const FormHorizontal = ({
+  onSubmit,
+  title,
+  children,
+  serverError,
+  editing = false
+}: {
+  onSubmit: any
+  title?: string
+  children: any
+  serverError?: string
+  editing?: boolean
+}) => {
+  const onSubmitP = useCallback(
+    (event: any) => {
+      event.preventDefault()
+      onSubmit(event)
+    },
+    [onSubmit]
+  )
+  return (
+    <div>
+      <form className={styles.Form} onSubmit={onSubmitP}>
+        <div className={styles.FormTitleRow}>
+          <div className={styles.FormTitle}>{title}</div>
+        </div>
+        <FormRow>
+          <div style={{ width: '100%' }}>{children}</div>
+          <div className={styles.FormButton}>
+            <button
+              data-testid={TEST_ID.editButton}
+              className={styles.FormEdit}
+            >
+              E
+            </button>
+          </div>
+        </FormRow>
+        {editing && <div className={styles.FormError}>{serverError}</div>}
+      </form>
+    </div>
   )
 }

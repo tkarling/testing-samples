@@ -8,7 +8,8 @@ import WithContextAsyncState from './main/WithState/WithContextAsyncStateProvide
 import WithReducer from './main/WithReducer/WithReducer'
 import WithAsyncReducer from './main/WithReducer/WithAsyncReducer'
 import WithContextAsyncReducer from './main/WithReducer/WithContextAsyncReducer'
-import Form from './main/form/AddTodo'
+import AddTodo from './main/form/AddTodo'
+import ShowEditTodo from './main/form/ShowEditTodo'
 
 import LoginOrRegisterForm from './examples/loginForm/LoginOrRegister'
 
@@ -34,7 +35,10 @@ const Main: React.FC = () => (
       {widget(<WithAsyncState />)}
       {widget(<WithContextAsyncState />)}
     </Row>
-    <Row>{widget(<Form />)}</Row>
+    <Row>
+      {widget(<AddTodo />)}
+      {widget(<ShowEditTodo />)}
+    </Row>
     <Row>
       {widget(<WithReducer />)}
       {widget(<WithAsyncReducer />)}

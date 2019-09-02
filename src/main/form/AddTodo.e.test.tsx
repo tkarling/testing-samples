@@ -3,6 +3,7 @@ import { mount } from 'enzyme'
 import { getText, click, setValue, submitForm } from '../../testHelpers.e'
 import LoginOrRegister, { TEST_ID } from './AddTodo'
 
+const TASK_REQUIRED_ERROR = 'Task required'
 const TASK = 'task1'
 const CATEGORY = 'category1'
 
@@ -66,6 +67,22 @@ describe('Add Todo Form', () => {
     expectOnFilledInForm(wrapper, [CATEGORY])
 
     await submit(wrapper)
-    expectOnFormWithError(wrapper, 'Task required')
+    expectOnFormWithError(wrapper, TASK_REQUIRED_ERROR)
+  })
+
+  it('removes error after new input', async () => {
+    expect.assertions(4 + 1 + 5 + 4 + 2 + 1)
+
+    setValue(wrapper, 'category', CATEGORY)
+    expectOnFilledInForm(wrapper, [CATEGORY])
+
+    await submit(wrapper)
+    expectOnFormWithError(wrapper, TASK_REQUIRED_ERROR)
+
+    setValue(wrapper, 'task', TASK)
+    expectOnFilledInForm(wrapper, [TASK, CATEGORY])
+    expect(getText(wrapper, TEST_ID.container)).not.toContain(
+      TASK_REQUIRED_ERROR
+    )
   })
 })

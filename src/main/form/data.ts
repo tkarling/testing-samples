@@ -16,5 +16,10 @@ export const FIELDS = {
   category: {
     id: 'category',
     label: 'Category'
+  },
+  completed: {
+    id: 'completed',
+    label: 'Completed',
+    type: 'checkbox'
   }
 }

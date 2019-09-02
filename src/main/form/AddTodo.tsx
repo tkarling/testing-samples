@@ -10,8 +10,8 @@ const submit = (inputs: any) => {
   if (!inputs.task) {
     return Promise.reject(new Error('Task required'))
   }
-  console.log('submitted', inputs)
-  return Promise.resolve({})
+  console.log('submitted', { ...inputs, completed: false })
+  return Promise.resolve(true)
 }
 
 const AddTodo = () => {
