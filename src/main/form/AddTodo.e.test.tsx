@@ -1,7 +1,7 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getText, click, setValue, submitForm } from '../../testHelpers.e'
-import LoginOrRegister, { TEST_ID } from './AddTodo'
+import { getText, setValue, submitForm } from '../../testHelpers.e'
+import AddTodo, { TEST_ID } from './AddTodo'
 
 const TASK_REQUIRED_ERROR = 'Task required'
 const TASK = 'task1'
@@ -31,7 +31,7 @@ const expectOnFilledInForm = (wrapper: any, inputs: string[]) => {
   })
 }
 
-const setup = () => mount(<LoginOrRegister />)
+const setup = () => mount(<AddTodo />)
 const submit = async (wrapper: any) => {
   submitForm(wrapper)
   await wrapper.update()

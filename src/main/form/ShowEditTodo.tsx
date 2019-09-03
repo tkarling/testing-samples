@@ -10,6 +10,7 @@ import { useToggleEditingForm as useForm } from '../../hooks/useForm'
 export const TEST_ID = {
   container: 'container'
 }
+export const SAMPLE = { task: 'go shopping', category: 'weekly' }
 
 const submit = (inputs: any) => {
   if (!inputs.task) {
@@ -28,7 +29,12 @@ const ShowEditTodo = () => {
     onToggle,
     onSubmit
   } = useForm({
-    callback: submit
+    callback: submit,
+    initialValues: {
+      task: SAMPLE.task,
+      category: SAMPLE.category,
+      completed: false
+    }
   })
 
   return (
