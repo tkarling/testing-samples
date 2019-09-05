@@ -25,17 +25,17 @@ describe('WithState', () => {
       click(wrapper, TEST_ID.addButton)
       expect(getText(wrapper, TEST_ID.container)).toContain(TEXT.itemTitleBase)
     })
-    it('can toggle checked status', async () => {
+    it('can toggle checked status', () => {
       expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
 
       // toggle completed to true
       toggleCheck(wrapper, TEST_ID.toggleCheck)
-      await wrapper.update()
+      wrapper.update()
       expect(getElement(wrapper, TEST_ID.toggleCheck)).toBeChecked()
 
       // toggle completed back to false
       toggleCheck(wrapper, TEST_ID.toggleCheck)
-      await wrapper.update()
+      wrapper.update()
       expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
     })
 

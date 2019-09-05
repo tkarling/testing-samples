@@ -37,25 +37,30 @@ jest.mock('../../api/service', () => {
       expect(getElement(wrapper, counterId)).not.toExist()
     })
 
-    it('renders async counter', async () => {
+    it('renders async counter', done => {
       expect.assertions(1)
       const wrapper = setup()
-      await wrapper.update()
-      await wrapper.update()
-      expect(getText(wrapper, counterId)).toContain(mockExpectedCounter)
+      setImmediate(() => {
+        wrapper.update()
+        expect(getText(wrapper, counterId)).toContain(mockExpectedCounter)
+        done()
+      })
     })
 
-    it('can increment', async () => {
+    it('can increment', done => {
+      expect.assertions(2)
       const wrapper = setup()
-      await wrapper.update()
-      await wrapper.update()
+      setImmediate(() => {
+        wrapper.update()
 
-      click(wrapper, counterId)
-      expect(getText(wrapper, containerId)).toContain('Spinning')
-
-      await wrapper.update()
-      await wrapper.update()
-      expect(getText(wrapper, counterId)).toContain(mockExpectedCounter + 1)
+        click(wrapper, counterId)
+        expect(getText(wrapper, containerId)).toContain('Spinning')
+        setImmediate(() => {
+          wrapper.update()
+          expect(getText(wrapper, counterId)).toContain(mockExpectedCounter + 1)
+          done()
+        })
+      })
     })
   })
 })

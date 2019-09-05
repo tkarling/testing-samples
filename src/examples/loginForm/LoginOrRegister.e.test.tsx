@@ -66,33 +66,33 @@ describe(LoginOrRegister, () => {
 
     it('renders Register page', () => {
       expect.assertions(5 + 6)
-
       gotoToRegisterPage(wrapper)
     })
 
-    it('can go to register page and return to login page', async () => {
+    it('can go to register page and return to login page', () => {
       expect.assertions(5 + 6 + 5)
-
       gotoToRegisterPage(wrapper)
 
       click(wrapper, FORM_TEST_ID.link)
-      await wrapper.update()
       expectOnLoginPage(wrapper)
     })
   })
 
   describe('login/register/logout', () => {
-    it('can login', async () => {
+    it('can login', done => {
       expect.assertions(5 + 3)
 
       setValue(wrapper, 'username', VALID.username)
       setValue(wrapper, 'password', VALID.password)
       submitForm(wrapper)
-      await wrapper.update()
-      expectOnLoggedInPage(wrapper)
+      setImmediate(() => {
+        wrapper.update()
+        expectOnLoggedInPage(wrapper)
+        done()
+      })
     })
 
-    it('can register', async () => {
+    it('can register', done => {
       expect.assertions(5 + 6 + 3)
 
       gotoToRegisterPage(wrapper)
@@ -101,54 +101,60 @@ describe(LoginOrRegister, () => {
       setValue(wrapper, 'repeatPassword', VALID.password)
 
       submitForm(wrapper)
-      await wrapper.update()
-      expectOnLoggedInPage(wrapper)
+      setImmediate(() => {
+        wrapper.update()
+        expectOnLoggedInPage(wrapper)
+        done()
+      })
     })
 
-    it('can login and then logout', async () => {
+    it('can login and then logout', done => {
       expect.assertions(5 + 3 + 5)
 
       // login
       setValue(wrapper, 'username', VALID.username)
       setValue(wrapper, 'password', VALID.password)
       submitForm(wrapper)
-      await wrapper.update()
-      await wrapper.update()
-      expectOnLoggedInPage(wrapper)
+      setImmediate(() => {
+        wrapper.update()
+        expectOnLoggedInPage(wrapper)
 
-      // logout
-      click(wrapper, TEST_ID.logoutButton)
-      await wrapper.update()
-      expectOnLoginPage(wrapper)
+        // logout
+        click(wrapper, TEST_ID.logoutButton)
+        wrapper.update()
+        expectOnLoginPage(wrapper)
+        done()
+      })
     })
   })
 
   describe('server errors', () => {
-    const submitToSeeError = async (error: string) => {
+    const submitToSeeError = (error: string, done: any) => {
       submitForm(wrapper)
-      await wrapper.update()
-      await wrapper.update()
-      await wrapper.update()
-      expectTexts(wrapper, [error])
+      setImmediate(() => {
+        wrapper.update()
+        expectTexts(wrapper, [error])
+        done()
+      })
     }
-    it('login: error for missing username', async () => {
+    it('login: error for missing username', done => {
       api1.login.mockImplementation(() =>
         Promise.reject(new Error(mockServerError.cannotAuthenticate))
       )
       expect.assertions(5 + 1)
       setValue(wrapper, 'password', VALID.password)
-      await submitToSeeError(mockServerError.cannotAuthenticate)
+      submitToSeeError(mockServerError.cannotAuthenticate, done)
     })
-    it('login: error for missing password', () => {
+    it('login: error for missing password', done => {
       api1.login.mockImplementation(() =>
         Promise.reject(new Error(mockServerError.cannotAuthenticate))
       )
       expect.assertions(5 + 1)
       setValue(wrapper, 'username', VALID.username)
-      submitToSeeError(mockServerError.cannotAuthenticate)
+      submitToSeeError(mockServerError.cannotAuthenticate, done)
     })
 
-    it('register: error for missing username', () => {
+    it('register: error for missing username', done => {
       api1.register.mockImplementation(() =>
         Promise.reject(new Error(mockServerError.usernamePasswordRequired))
       )
@@ -157,9 +163,9 @@ describe(LoginOrRegister, () => {
       gotoToRegisterPage(wrapper)
       setValue(wrapper, 'password', VALID.password)
       setValue(wrapper, 'repeatPassword', VALID.password)
-      submitToSeeError(mockServerError.usernamePasswordRequired)
+      submitToSeeError(mockServerError.usernamePasswordRequired, done)
     })
-    it('register: error for missing password', () => {
+    it('register: error for missing password', done => {
       api1.register.mockImplementation(() =>
         Promise.reject(new Error(mockServerError.passwordsMustMatch))
       )
@@ -167,9 +173,9 @@ describe(LoginOrRegister, () => {
 
       gotoToRegisterPage(wrapper)
       setValue(wrapper, 'username', VALID.username)
-      submitToSeeError(mockServerError.passwordsMustMatch)
+      submitToSeeError(mockServerError.passwordsMustMatch, done)
     })
-    it('register: error for password mismatch', () => {
+    it('register: error for password mismatch', done => {
       api1.register.mockImplementation(() =>
         Promise.reject(new Error(mockServerError.passwordsMustMatch))
       )
@@ -179,7 +185,7 @@ describe(LoginOrRegister, () => {
       setValue(wrapper, 'username', VALID.username)
       setValue(wrapper, 'password', VALID.password)
       setValue(wrapper, 'repeatPassword', VALID.password + '1')
-      submitToSeeError(mockServerError.passwordsMustMatch)
+      submitToSeeError(mockServerError.passwordsMustMatch, done)
     })
   })
 })

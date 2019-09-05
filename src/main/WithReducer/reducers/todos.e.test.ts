@@ -6,7 +6,7 @@ const TODO2 = { id: '2', title: 'hei', completed: false }
 const INITIAL_TODOS = [TODO, TODO2]
 
 describe('todos Reducer', () => {
-  it('sets todos', async () => {
+  it('sets todos', () => {
     const todos = todosReducer([], {
       type: ACTION.set,
       todos: INITIAL_TODOS
@@ -16,7 +16,7 @@ describe('todos Reducer', () => {
     expectItem(todos[1] as Todo, TODO2)
   })
 
-  it('adds todo', async () => {
+  it('adds todo', () => {
     const TITLE = 'joo'
     const todos = todosReducer(INITIAL_TODOS, {
       type: ACTION.add,
@@ -28,7 +28,7 @@ describe('todos Reducer', () => {
     expectItem(todos[2] as Todo, TODO2)
   })
 
-  it('deletes todo', async () => {
+  it('deletes todo', () => {
     const todos = todosReducer(INITIAL_TODOS, {
       type: ACTION.delete,
       todo: INITIAL_TODOS[0]
@@ -37,7 +37,7 @@ describe('todos Reducer', () => {
     expectItem(todos[0] as Todo, TODO2)
   })
 
-  it('toggles todo', async () => {
+  it('toggles todo', () => {
     const todos = todosReducer(INITIAL_TODOS, {
       type: ACTION.toggle,
       todo: INITIAL_TODOS[0]

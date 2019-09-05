@@ -60,9 +60,12 @@ const expectToContain = (wrapper: any, texts: string[]) =>
 
     describe('After initial Fetch', () => {
       let wrapper: any
-      beforeEach(async () => {
-        wrapper = await setup()
-        await wrapper.update()
+      beforeEach(done => {
+        wrapper = setup()
+        setImmediate(() => {
+          wrapper.update()
+          done()
+        })
       })
 
       it('renders initial todos', () => {
@@ -70,38 +73,46 @@ const expectToContain = (wrapper: any, texts: string[]) =>
         expectToContain(wrapper, mockTodosInitial.map(item => item.title))
       })
 
-      it('can add Item', async () => {
+      it('can add Item', done => {
         expect.assertions(3)
         click(wrapper, TEST_ID.addButton)
         expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
-        await wrapper.update()
-        expectToContain(wrapper, mockTodosAfterAdd.map(item => item.title))
+        setImmediate(() => {
+          wrapper.update()
+          expectToContain(wrapper, mockTodosAfterAdd.map(item => item.title))
+          done()
+        })
       })
 
-      it('can toggle checked status', async () => {
+      it('can toggle checked status', done => {
         expect.assertions(5)
         expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
 
         // toggle completed to true
         toggleCheck(wrapper, TEST_ID.toggleCheck)
         expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
-        await wrapper.update()
-        await wrapper.update()
-        expect(getElement(wrapper, TEST_ID.toggleCheck)).toBeChecked()
+        setImmediate(() => {
+          wrapper.update()
+          expect(getElement(wrapper, TEST_ID.toggleCheck)).toBeChecked()
 
-        // toggle completed back to false
-        toggleCheck(wrapper, TEST_ID.toggleCheck)
-        expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
-        await wrapper.update()
-        expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
+          // toggle completed back to false
+          toggleCheck(wrapper, TEST_ID.toggleCheck)
+          expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
+          wrapper.update()
+          expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
+          done()
+        })
       })
 
-      it('can delete Item', async () => {
+      it('can delete Item', done => {
         expect.assertions(2)
         click(wrapper, TEST_ID.deleteButton)
         expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
-        await wrapper.update()
-        expect(getText(wrapper, TEST_ID.container)).toContain(TEXT.noItems)
+        setImmediate(() => {
+          wrapper.update()
+          expect(getText(wrapper, TEST_ID.container)).toContain(TEXT.noItems)
+          done()
+        })
       })
     })
   })

@@ -36,12 +36,8 @@ const expectOnFormWithError = (wrapper: any, error: string) => {
 }
 
 const setup = () => mount(<ShowEditTodo />)
-const clickEdit = async (wrapper: any) => {
+const clickEdit = (wrapper: any) => {
   submitForm(wrapper)
-  await wrapper.update()
-  await wrapper.update()
-  await wrapper.update()
-  await wrapper.update()
 }
 
 describe('Show/Edit Form', () => {
@@ -55,18 +51,18 @@ describe('Show/Edit Form', () => {
     expectOnView(wrapper, [SAMPLE.task, SAMPLE.category])
   })
 
-  it('goes to Form and renders it', async () => {
+  it('goes to Form and renders it', () => {
     expect.assertions(4 + 4)
     expectOnView(wrapper, [SAMPLE.task, SAMPLE.category])
 
-    await clickEdit(wrapper)
+    clickEdit(wrapper)
     expectOnFilledInForm(wrapper, [SAMPLE.task, SAMPLE.category])
   })
 
-  it('can submit Form succesfully', async () => {
+  it('can submit Form succesfully', done => {
     expect.assertions(4 + 4 + 4)
 
-    await clickEdit(wrapper)
+    clickEdit(wrapper)
     expectOnFilledInForm(wrapper, [SAMPLE.task, SAMPLE.category])
 
     const UPDATED = {
@@ -77,20 +73,28 @@ describe('Show/Edit Form', () => {
     setValue(wrapper, 'category', UPDATED.category)
     expectOnFilledInForm(wrapper, [UPDATED.task, UPDATED.category])
 
-    await clickEdit(wrapper)
-    expectOnView(wrapper, [UPDATED.task, UPDATED.category])
+    clickEdit(wrapper)
+    setImmediate(() => {
+      wrapper.update()
+      expectOnView(wrapper, [UPDATED.task, UPDATED.category])
+      done()
+    })
   })
 
-  it('shows error for Missing task', async () => {
+  it('shows error for Missing task', done => {
     expect.assertions(4 + 3 + 3)
 
-    await clickEdit(wrapper)
+    clickEdit(wrapper)
     expectOnFilledInForm(wrapper, [SAMPLE.task, SAMPLE.category])
 
     setValue(wrapper, 'task', '')
     expectOnFilledInForm(wrapper, [SAMPLE.category])
 
-    await clickEdit(wrapper)
-    expectOnFormWithError(wrapper, TASK_REQUIRED_ERROR)
+    clickEdit(wrapper)
+    setImmediate(() => {
+      wrapper.update()
+      expectOnFormWithError(wrapper, TASK_REQUIRED_ERROR)
+      done()
+    })
   })
 })
