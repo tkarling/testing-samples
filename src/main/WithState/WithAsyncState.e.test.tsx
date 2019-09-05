@@ -38,8 +38,9 @@ jest.mock('../../api/service', () => {
     })
 
     it('renders async counter', done => {
-      expect.assertions(1)
+      expect.assertions(2)
       const wrapper = setup()
+      expect(getText(wrapper, containerId)).toContain('Spinning')
       setImmediate(() => {
         wrapper.update()
         expect(getText(wrapper, counterId)).toContain(mockExpectedCounter)
@@ -48,8 +49,9 @@ jest.mock('../../api/service', () => {
     })
 
     it('can increment', done => {
-      expect.assertions(2)
+      expect.assertions(3)
       const wrapper = setup()
+      expect(getText(wrapper, containerId)).toContain('Spinning')
       setImmediate(() => {
         wrapper.update()
 
