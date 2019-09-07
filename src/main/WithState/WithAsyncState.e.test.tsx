@@ -1,8 +1,10 @@
 import React from 'react'
 import { mount } from 'enzyme'
 import { getElement, getText, click } from '../../testHelpers.e'
+
 import WithAsyncState from './WithAsyncState'
 import WithContextAsyncState from './WithContextAsyncStateProvider'
+import WithRenderProp from './WithRenderProp'
 
 const mockExpectedCounter = 6
 jest.mock('../../api/service', () => {
@@ -17,52 +19,58 @@ jest.mock('../../api/service', () => {
     }
   }
 })
-;['WithAsyncState', 'WithContextAsyncState'].forEach(componentName => {
-  const setup = () =>
-    mount(
-      componentName === 'WithAsyncState' ? (
-        <WithAsyncState />
-      ) : (
-        <WithContextAsyncState />
+;['WithAsyncState', 'WithContextAsyncState', 'WithRenderProp'].forEach(
+  componentName => {
+    const setup = () =>
+      mount(
+        componentName === 'WithAsyncState' ? (
+          <WithAsyncState />
+        ) : WithContextAsyncState ? (
+          <WithContextAsyncState />
+        ) : (
+          <WithRenderProp />
+        )
       )
-    )
-  describe(componentName, () => {
-    const containerId = 'container'
-    const counterId = 'counter'
+    describe(componentName, () => {
+      const containerId = 'container'
+      const counterId = 'counter'
 
-    it('renders Spinning before fetch', () => {
-      expect.assertions(2)
-      const wrapper = setup()
-      expect(getText(wrapper, containerId)).toContain('Spinning')
-      expect(getElement(wrapper, counterId)).not.toExist()
-    })
-
-    it('renders async counter', done => {
-      expect.assertions(2)
-      const wrapper = setup()
-      expect(getText(wrapper, containerId)).toContain('Spinning')
-      setImmediate(() => {
-        wrapper.update()
-        expect(getText(wrapper, counterId)).toContain(mockExpectedCounter)
-        done()
+      it('renders Spinning before fetch', () => {
+        expect.assertions(2)
+        const wrapper = setup()
+        expect(getText(wrapper, containerId)).toContain('Spinning')
+        expect(getElement(wrapper, counterId)).not.toExist()
       })
-    })
 
-    it('can increment', done => {
-      expect.assertions(3)
-      const wrapper = setup()
-      expect(getText(wrapper, containerId)).toContain('Spinning')
-      setImmediate(() => {
-        wrapper.update()
-
-        click(wrapper, counterId)
+      it('renders async counter', done => {
+        expect.assertions(2)
+        const wrapper = setup()
         expect(getText(wrapper, containerId)).toContain('Spinning')
         setImmediate(() => {
           wrapper.update()
-          expect(getText(wrapper, counterId)).toContain(mockExpectedCounter + 1)
+          expect(getText(wrapper, counterId)).toContain(mockExpectedCounter)
           done()
         })
       })
+
+      it('can increment', done => {
+        expect.assertions(3)
+        const wrapper = setup()
+        expect(getText(wrapper, containerId)).toContain('Spinning')
+        setImmediate(() => {
+          wrapper.update()
+
+          click(wrapper, counterId)
+          expect(getText(wrapper, containerId)).toContain('Spinning')
+          setImmediate(() => {
+            wrapper.update()
+            expect(getText(wrapper, counterId)).toContain(
+              mockExpectedCounter + 1
+            )
+            done()
+          })
+        })
+      })
     })
-  })
-})
+  }
+)
