@@ -1,9 +1,15 @@
 import { useEffect, useState } from 'react'
+import useIsMounted from '../../../hooks/useIsMounted'
 import { api1 as api } from '../../../api/service'
 
 const useCounter = () => {
-  const [counter, setCounter] = useState(0)
-  const [loading, setLoading] = useState(false)
+  const [counter, setCounterU] = useState(5)
+  const [loading, setLoadingU] = useState(false)
+
+  const { useSafe } = useIsMounted()
+  const setCounter = useSafe(setCounterU)
+  const setLoading = useSafe(setLoadingU)
+
   useEffect(() => {
     setLoading(true)
     api
@@ -16,7 +22,7 @@ const useCounter = () => {
         console.error('Error getting counter', error)
         setLoading(false)
       })
-  }, [])
+  }, [setCounter, setLoading])
 
   const increment = () => {
     setLoading(true)

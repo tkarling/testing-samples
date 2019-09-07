@@ -1,4 +1,5 @@
 import { useReducer, useEffect, useCallback, useState } from 'react'
+import useIsMounted from '../../../hooks/useIsMounted'
 import todosReducer, { ACTION as REDUCER_ACTION } from '../reducers/todos'
 import { api1, api2, serviceApi } from '../../../api/service'
 
@@ -10,8 +11,13 @@ export const ACTION = {
 }
 
 const useAsyncTodos = (api: serviceApi) => {
-  const [todos, dispatch] = useReducer(todosReducer as any, []) as any
-  const [isLoading, setIsLoading] = useState(false)
+  const [todos, dispatchU] = useReducer(todosReducer as any, []) as any
+  const [isLoading, setIsLoadingU] = useState(false)
+
+  const { useSafe } = useIsMounted()
+  const dispatch = useSafe(dispatchU)
+  const setIsLoading = useSafe(setIsLoadingU)
+
   useEffect(() => {
     setIsLoading(true)
     api
@@ -24,7 +30,7 @@ const useAsyncTodos = (api: serviceApi) => {
         console.error('Error getting todos', error)
         setIsLoading(false)
       })
-  }, [api, dispatch])
+  }, [api, dispatch, setIsLoading])
 
   const customDispatch = useCallback(
     async (action: any) => {
@@ -70,7 +76,7 @@ const useAsyncTodos = (api: serviceApi) => {
           dispatch(action)
       }
     },
-    [api, dispatch]
+    [api, dispatch, setIsLoading]
   )
 
   return { todos, dispatch: customDispatch, isLoading }
