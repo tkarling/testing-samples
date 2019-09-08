@@ -21,7 +21,6 @@ describe('WithState', () => {
 
   describe('with one item created', () => {
     beforeEach(() => {
-      wrapper = setup()
       click(wrapper, TEST_ID.addButton)
       expect(getText(wrapper, TEST_ID.container)).toContain(TEXT.itemTitleBase)
     })
