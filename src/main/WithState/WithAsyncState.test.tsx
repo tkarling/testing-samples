@@ -1,7 +1,9 @@
 import React from 'react'
+import { render, waitForElement, fireEvent } from '@testing-library/react'
+
 import WithAsyncState from './WithAsyncState'
-import { api1 as api } from '../../api/service'
-import { render, waitForElement, fireEvent, wait } from '@testing-library/react'
+import WithContextAsyncState from './WithContextAsyncStateProvider'
+import WithRenderProp from './WithRenderProp'
 
 const mockExpectedCounter = 6
 jest.mock('../../api/service', () => {
@@ -17,8 +19,6 @@ jest.mock('../../api/service', () => {
   }
 })
 
-const setup = () => render(<WithAsyncState />)
-
 const loadingId = 'loading'
 const counterId = 'counter'
 const waitCounterValue2 = async (getByTestId: any, expectedValue: number) => {
@@ -28,53 +28,58 @@ const waitCounterValue2 = async (getByTestId: any, expectedValue: number) => {
   )
   expect(counterText).toContain(expectedValue)
 }
+;['WithAsyncState', 'WithContextAsyncState', 'WithRenderProp'].forEach(
+  componentName => {
+    const setup = () =>
+      render(
+        componentName === 'WithAsyncState' ? (
+          <WithAsyncState />
+        ) : WithContextAsyncState ? (
+          <WithContextAsyncState />
+        ) : (
+          <WithRenderProp />
+        )
+      )
 
-describe('WithAsyncState', () => {
-  describe('find by testId', () => {
-    it('renders Spinning before fetch', () => {
-      expect.assertions(2)
-      const { getByTestId, queryByTestId } = setup()
-      expect(getByTestId(loadingId)).toHaveTextContent('Spinning...')
-      expect(queryByTestId(counterId)).toBeNull()
+    describe(componentName, () => {
+      describe('find by testId', () => {
+        it('renders Spinning before fetch', () => {
+          expect.assertions(2)
+          const { getByTestId, queryByTestId } = setup()
+          expect(getByTestId(loadingId)).toHaveTextContent('Spinning...')
+          expect(queryByTestId(counterId)).toBeNull()
+        })
+
+        it('renders async counter', async () => {
+          expect.assertions(2)
+          const { getByTestId } = setup()
+          await waitCounterValue2(getByTestId, mockExpectedCounter)
+        })
+
+        it('can increment', async () => {
+          expect.assertions(4)
+          const { getByTestId } = setup()
+          await waitCounterValue2(getByTestId, mockExpectedCounter)
+
+          fireEvent.click(getByTestId(counterId))
+          await waitCounterValue2(getByTestId, mockExpectedCounter + 1)
+        })
+      })
+
+      describe('find by text', () => {
+        it('renders Spinning before fetch', () => {
+          const { getByText, queryByText } = setup()
+          expect(getByText(/Spinning/).textContent).toContain('Spinning')
+          expect(queryByText(/Counter/)).toBeNull()
+        })
+
+        it('renders async counter', async () => {
+          const { getByText, queryByText } = setup()
+          const counterEl = await waitForElement(() => getByText(/Counter/))
+          expect(counterEl.textContent).toContain(mockExpectedCounter)
+          expect(queryByText(/Spinning/)).toBeNull()
+        })
+      })
     })
-
-    it('renders async counter', async () => {
-      expect.assertions(2)
-      const { getByTestId } = setup()
-      await waitCounterValue2(getByTestId, mockExpectedCounter)
-    })
-
-    it('can increment', async () => {
-      expect.assertions(4)
-      const { getByTestId } = setup()
-      await waitCounterValue2(getByTestId, mockExpectedCounter)
-
-      fireEvent.click(getByTestId(counterId))
-      await waitCounterValue2(getByTestId, mockExpectedCounter + 1)
-    })
-  })
-
-  describe('find by text', () => {
-    it('renders Spinning before fetch', () => {
-      const { getByText, queryByText } = setup()
-      expect(getByText(/Spinning/).textContent).toContain('Spinning')
-      expect(queryByText(/Counter/)).toBeNull()
-    })
-
-    it('renders async counter', async () => {
-      const { getByText, queryByText } = setup()
-      const counterEl = await waitForElement(() => getByText(/Counter/))
-      expect(counterEl.textContent).toContain(mockExpectedCounter)
-      expect(queryByText(/Spinning/)).toBeNull()
-    })
-
-    it('renders async counter after fetch w custom counter', async () => {
-      const EXPECTED_COUNTER2 = 15
-      api.getCounter = jest.fn().mockResolvedValueOnce(EXPECTED_COUNTER2)
-
-      const { getByText } = setup()
-      const counterEl = await waitForElement(() => getByText(/Counter/))
-      expect(counterEl.textContent).toContain(EXPECTED_COUNTER2)
-    })
-  })
-})
+  }
+)
