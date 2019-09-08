@@ -54,11 +54,12 @@ jest.mock('../../api/service', () => {
       })
 
       it('can increment', done => {
-        expect.assertions(3)
+        expect.assertions(4)
         const wrapper = setup()
         expect(getText(wrapper, containerId)).toContain('Spinning')
         setImmediate(() => {
           wrapper.update()
+          expect(getText(wrapper, counterId)).toContain(mockExpectedCounter)
 
           click(wrapper, counterId)
           expect(getText(wrapper, containerId)).toContain('Spinning')
