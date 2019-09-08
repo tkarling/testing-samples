@@ -1,6 +1,11 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getElement, getText, click } from '../../testHelpers.e'
+import {
+  callSetImmediate,
+  getElement,
+  getText,
+  click
+} from '../../testHelpers.e'
 
 import WithAsyncState from './WithAsyncState'
 import WithContextAsyncState from './WithContextAsyncStateProvider'
@@ -19,6 +24,16 @@ jest.mock('../../api/service', () => {
     }
   }
 })
+
+const containerId = 'container'
+const counterId = 'counter'
+const waitCounterValue2 = async (wrapper: any, expectedValue: number) => {
+  expect(getText(wrapper, containerId)).toContain('Spinning')
+
+  await callSetImmediate()
+  wrapper.update()
+  expect(getText(wrapper, counterId)).toContain(expectedValue)
+}
 ;['WithAsyncState', 'WithContextAsyncState', 'WithRenderProp'].forEach(
   componentName => {
     const setup = () =>
@@ -32,9 +47,6 @@ jest.mock('../../api/service', () => {
         )
       )
     describe(componentName, () => {
-      const containerId = 'container'
-      const counterId = 'counter'
-
       it('renders Spinning before fetch', () => {
         expect.assertions(2)
         const wrapper = setup()
@@ -42,35 +54,19 @@ jest.mock('../../api/service', () => {
         expect(getElement(wrapper, counterId)).not.toExist()
       })
 
-      it('renders async counter', done => {
+      it('renders async counter', async () => {
         expect.assertions(2)
         const wrapper = setup()
-        expect(getText(wrapper, containerId)).toContain('Spinning')
-        setImmediate(() => {
-          wrapper.update()
-          expect(getText(wrapper, counterId)).toContain(mockExpectedCounter)
-          done()
-        })
+        await waitCounterValue2(wrapper, mockExpectedCounter)
       })
 
-      it('can increment', done => {
+      it('can increment', async () => {
         expect.assertions(4)
         const wrapper = setup()
-        expect(getText(wrapper, containerId)).toContain('Spinning')
-        setImmediate(() => {
-          wrapper.update()
-          expect(getText(wrapper, counterId)).toContain(mockExpectedCounter)
+        await waitCounterValue2(wrapper, mockExpectedCounter)
 
-          click(wrapper, counterId)
-          expect(getText(wrapper, containerId)).toContain('Spinning')
-          setImmediate(() => {
-            wrapper.update()
-            expect(getText(wrapper, counterId)).toContain(
-              mockExpectedCounter + 1
-            )
-            done()
-          })
-        })
+        click(wrapper, counterId)
+        await waitCounterValue2(wrapper, mockExpectedCounter + 1)
       })
     })
   }

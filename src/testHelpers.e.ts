@@ -1,3 +1,7 @@
+export function callSetImmediate() {
+  return new Promise(resolve => setImmediate(resolve))
+}
+
 export const getElement = (wrapper: any, id: string) =>
   wrapper.find(`[data-testid="${id}"]`)
 
