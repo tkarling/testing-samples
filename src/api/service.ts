@@ -3,7 +3,6 @@ async function stall(stallTime = 1000) {
 }
 const getId = () => Date.now() + ''
 
-export const FETCHED_COUNTER = 5
 export const FETCHED_TODOS: Todo[] = [
   {
     id: '1',
@@ -17,20 +16,6 @@ export const FETCHED_TODOS: Todo[] = [
   }
 ]
 export class serviceApi {
-  counter = FETCHED_COUNTER
-  // needed for unit testing
-  resetCounter = () => {
-    this.counter = FETCHED_COUNTER
-  }
-
-  getCounter = () => stall().then(() => this.counter)
-  setCounter = (counter: number) =>
-    stall().then(() => {
-      this.counter = counter
-      console.log('setting', this.counter)
-      return this.counter
-    })
-
   todos = FETCHED_TODOS
   // needed for unit testing
   resetTodos = () => {

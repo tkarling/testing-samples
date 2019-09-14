@@ -6,18 +6,10 @@ import WithContextAsyncState from './WithContextAsyncStateProvider'
 import WithRenderProp from './WithRenderProp'
 
 const mockExpectedCounter = 6
-jest.mock('../../api/service', () => {
-  return {
-    api1: {
-      getCounter: jest.fn(() => Promise.resolve(mockExpectedCounter)),
-      setCounter: jest.fn(counter => Promise.resolve(counter))
-    },
-    api2: {
-      getCounter: jest.fn(() => Promise.resolve(mockExpectedCounter)),
-      setCounter: jest.fn(counter => Promise.resolve(counter))
-    }
-  }
-})
+jest.mock('../../api/counterService', () => ({
+  getCounter: jest.fn(storeId => Promise.resolve(mockExpectedCounter)),
+  setCounter: jest.fn((storeId, counter) => Promise.resolve(counter))
+}))
 
 const loadingId = 'loading'
 const counterId = 'counter'

@@ -1,5 +1,6 @@
 import { expectItem } from '../testHelpers.e'
-import { api1 as api, api2, FETCHED_COUNTER, FETCHED_TODOS } from './service'
+import { api1 as api, api2, FETCHED_TODOS } from './service'
+import apiC, { FETCHED_COUNTER } from './counterService'
 
 jest.useFakeTimers()
 
@@ -17,16 +18,16 @@ describe('api', () => {
 
   beforeEach(() => {
     api.resetTodos()
-    api.resetCounter()
+    // apiC.resetCounter()
   })
-  it('gets counter', async () => {
-    const data = await callApi(api.getCounter)
-    expect(data).toEqual(FETCHED_COUNTER)
+  // it('gets counter', async () => {
+  //   const data = await apiC.getCounter('testStoreID') //
+  //   expect(data).toEqual(0)
 
-    // api2 did not change
-    const data2 = await callApi(api.getCounter)
-    expect(data).toEqual(FETCHED_COUNTER)
-  })
+  //   // // api2 did not change
+  //   // const data2 = await callApi(apiC.getCounter)
+  //   // expect(data).toEqual(FETCHED_COUNTER)
+  // })
 
   it('gets todos', async () => {
     const data = await callApi(api.getTodos)
