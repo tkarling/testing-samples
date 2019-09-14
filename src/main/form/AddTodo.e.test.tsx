@@ -1,17 +1,11 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getText, setValue, submitForm } from '../../testHelpers.e'
+import { getText, setValue, submitForm, expectTexts } from '../../testHelpers.e'
 import AddTodo, { TEST_ID } from './AddTodo'
 
 const TASK_REQUIRED_ERROR = 'Task required'
 const TASK = 'task1'
 const CATEGORY = 'category1'
-
-const expectTexts = (wrapper: any, texts: string[]) => {
-  texts.forEach(text =>
-    expect(getText(wrapper, TEST_ID.container)).toContain(text)
-  )
-}
 
 const FORM_TEXTS = ['Add Todo', 'Task', 'Category', 'Submit']
 const expectOnEmptyForm = (wrapper: any) => {

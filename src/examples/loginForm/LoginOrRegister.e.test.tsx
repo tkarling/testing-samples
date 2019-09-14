@@ -1,6 +1,6 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getText, click, setValue, submitForm } from '../../testHelpers.e'
+import { click, setValue, submitForm, expectTexts } from '../../testHelpers.e'
 import { TEST_ID as FORM_TEST_ID } from '../../components/Form'
 import LoginOrRegister, { TEST_ID } from './LoginOrRegister'
 import { SERVER_ERROR as mockServerError, VALID } from '../../api/constants'
@@ -15,11 +15,6 @@ jest.mock('../../api/loginService', () => {
   }
 })
 
-const expectTexts = (wrapper: any, texts: string[]) => {
-  texts.forEach(text =>
-    expect(getText(wrapper, TEST_ID.container)).toContain(text)
-  )
-}
 const expectOnLoginPage = (wrapper: any) => {
   expectTexts(wrapper, [
     'Sign In',
