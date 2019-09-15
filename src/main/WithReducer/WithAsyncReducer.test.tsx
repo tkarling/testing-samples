@@ -2,7 +2,7 @@ import React from 'react'
 import { render, waitForElement, fireEvent } from '@testing-library/react'
 import { TEXT, TEST_ID } from './components/Common'
 import WithAsyncReducer from './WithAsyncReducer'
-import WithContextAsyncReducer from './WithContextAsyncReducer'
+import WithContextAsyncReducer from './WithContextAsyncReducerProvider'
 import api from '../../api/todosService'
 
 const TITLE = 'moi'

@@ -10,7 +10,7 @@ import WithRenderProp from './main/WithState/WithRenderProp'
 
 import WithReducer from './main/WithReducer/WithReducer'
 import WithAsyncReducer from './main/WithReducer/WithAsyncReducer'
-import WithContextAsyncReducer from './main/WithReducer/WithContextAsyncReducer'
+import WithContextAsyncReducer from './main/WithReducer/WithContextAsyncReducerProvider'
 
 import AddTodo from './main/form/AddTodo'
 import ShowEditTodo from './main/form/ShowEditTodo'

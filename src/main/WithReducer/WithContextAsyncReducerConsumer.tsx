@@ -1,7 +1,7 @@
 import React, { useContext } from 'react'
-import useAsyncTodos, { ACTION } from './hooks/useAsyncTodos'
+import { ACTION } from './hooks/useAsyncTodos'
 import * as Widget from './components/Common'
-import { TEST_ID } from './components/Common'
+import { TodosContext, ActionContext } from './WithContextAsyncReducerContext'
 
 const TodoList = () => {
   const { todos } = useContext(TodosContext)
@@ -34,26 +34,4 @@ const TodoList = () => {
   )
 }
 
-const asyncNoop = (action: any) => Promise.resolve()
-const TodosContext = React.createContext({ todos: [], isLoading: false })
-const ActionContext = React.createContext({ dispatch: asyncNoop })
-
-const WithContextAsyncReducer = () => {
-  const { todos, isLoading, dispatch } = useAsyncTodos(
-    'WithContextAsyncReducer'
-  )
-
-  return (
-    <ActionContext.Provider value={{ dispatch }}>
-      <TodosContext.Provider value={{ todos, isLoading }}>
-        <div data-testid={TEST_ID.container}>
-          <h4>With Context Async Reducer</h4>
-          {isLoading && <div>Spinning...</div>}
-          {!isLoading && <TodoList />}
-        </div>
-      </TodosContext.Provider>
-    </ActionContext.Provider>
-  )
-}
-
-export default WithContextAsyncReducer
+export default TodoList
