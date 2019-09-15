@@ -1,9 +1,6 @@
 import React from 'react'
-import useCounter from './hooks/useCounter'
+import { CounterRenderProp } from './hooks/useCounter'
 import Counter from './components/Counter'
-
-const CounterRenderProp = ({ children }: { children: any }) =>
-  children(useCounter('CounterRenderProp'))
 
 export class WithRenderProp extends React.Component {
   render() {

@@ -4,15 +4,17 @@ const Counter = ({
   counter,
   increment,
   title,
-  loading
+  loading,
+  id = 'counter'
 }: {
   counter: number
   increment: any
   title: string
   loading: boolean
+  id?: string
 }) =>
   !loading ? (
-    <div onClick={increment} id="counter" data-testid="counter">
+    <div onClick={increment} id={id} data-testid={id}>
       {title}: {counter}
     </div>
   ) : (

@@ -41,4 +41,7 @@ const useCounter = (storeId: string) => {
   return { counter, increment, loading }
 }
 
+export const CounterRenderProp = ({ children }: { children: any }) =>
+  children(useCounter('CounterRenderProp'))
+
 export default useCounter

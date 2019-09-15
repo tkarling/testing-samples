@@ -11,10 +11,10 @@ jest.mock('../../api/counterService', () => ({
   setCounter: jest.fn((storeId, counter) => Promise.resolve(counter))
 }))
 
-const loadingId = 'loading'
+const containerId = 'container'
 const counterId = 'counter'
 const waitCounterValue2 = async (getByTestId: any, expectedValue: number) => {
-  expect(getByTestId(loadingId)).toHaveTextContent('Spinning...')
+  expect(getByTestId(containerId)).toHaveTextContent('Spinning...')
   const counterText = await waitForElement(
     () => getByTestId(counterId).textContent
   )
@@ -38,7 +38,7 @@ const waitCounterValue2 = async (getByTestId: any, expectedValue: number) => {
         it('renders Spinning before fetch', () => {
           expect.assertions(2)
           const { getByTestId, queryByTestId } = setup()
-          expect(getByTestId(loadingId)).toHaveTextContent('Spinning...')
+          expect(getByTestId(containerId)).toHaveTextContent('Spinning...')
           expect(queryByTestId(counterId)).toBeNull()
         })
 
@@ -55,21 +55,6 @@ const waitCounterValue2 = async (getByTestId: any, expectedValue: number) => {
 
           fireEvent.click(getByTestId(counterId))
           await waitCounterValue2(getByTestId, mockExpectedCounter + 1)
-        })
-      })
-
-      describe('find by text', () => {
-        it('renders Spinning before fetch', () => {
-          const { getByText, queryByText } = setup()
-          expect(getByText(/Spinning/).textContent).toContain('Spinning')
-          expect(queryByText(/Counter/)).toBeNull()
-        })
-
-        it('renders async counter', async () => {
-          const { getByText, queryByText } = setup()
-          const counterEl = await waitForElement(() => getByText(/Counter/))
-          expect(counterEl.textContent).toContain(mockExpectedCounter)
-          expect(queryByText(/Spinning/)).toBeNull()
         })
       })
     })
