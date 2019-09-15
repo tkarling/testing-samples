@@ -1,5 +1,5 @@
 import React from 'react'
-import { ACTION, useAsyncTodos1 as useAsyncTodos } from './hooks/useAsyncTodos'
+import useAsyncTodos, { ACTION } from './hooks/useAsyncTodos'
 import * as Widget from './components/Common'
 import { TEST_ID } from './components/Common'
 
@@ -30,7 +30,7 @@ const TodoList = ({ todos, dispatch }: { todos: Todo[]; dispatch: any }) => (
 )
 
 const WithAsyncReducer = () => {
-  const { todos, isLoading, dispatch } = useAsyncTodos()
+  const { todos, isLoading, dispatch } = useAsyncTodos('WithAsyncReducer')
 
   return (
     <div data-testid={TEST_ID.container}>

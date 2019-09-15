@@ -11,7 +11,7 @@ import {
 import { TEXT, TEST_ID } from './components/Common'
 import WithAsyncReducer from './WithAsyncReducer'
 import WithContextAsyncReducer from './WithContextAsyncReducer'
-import { api1, api2 } from '../../api/service'
+import api from '../../api/todosService'
 
 const TITLE = 'moi'
 const TITLE2 = 'joo'
@@ -30,25 +30,13 @@ const mockTodosInitial = [TODO]
 const mockTodosAfterAdd = [ADDED_TODO, TODO]
 const mockTodosAfterToggle = [{ ...TODO, completed: true }]
 const mockTodosAfterSecondToggle = [{ ...TODO, completed: false }]
-jest.mock('../../api/service', () => {
-  return {
-    api1: {
-      getTodos: jest.fn(() => Promise.resolve(mockTodosInitial)),
-      addTodo: jest.fn(() => Promise.resolve(mockTodosAfterAdd)),
-      // toggleTodo: jest.fn(() => Promise.resolve(mockTodosAfterToggle)),
-      deleteTodo: jest.fn(() => Promise.resolve([]))
-    },
-    api2: {
-      getTodos: jest.fn(() => Promise.resolve(mockTodosInitial)),
-      addTodo: jest.fn(() => Promise.resolve(mockTodosAfterAdd)),
-      // toggleTodo: jest.fn(() => Promise.resolve(mockTodosAfterToggle)),
-      deleteTodo: jest.fn(() => Promise.resolve([]))
-    }
-  }
-})
+jest.mock('../../api/todosService', () => ({
+  getTodos: jest.fn(() => Promise.resolve(mockTodosInitial)),
+  addTodo: jest.fn(() => Promise.resolve(mockTodosAfterAdd)),
+  // toggleTodo: jest.fn(() => Promise.resolve(mockTodosAfterToggle)),
+  deleteTodo: jest.fn(() => Promise.resolve([]))
+}))
 ;['WithAsyncReducer', 'WithContextAsyncReducer'].forEach(componentName => {
-  const api = componentName === 'WithAsyncReducer' ? api2 : api2
-
   const setup = () =>
     mount(
       componentName === 'WithAsyncState' ? (
@@ -90,8 +78,8 @@ jest.mock('../../api/service', () => {
       })
 
       it('can toggle checked status', async () => {
-        function setupMock(myApi: any, value: any) {
-          myApi.toggleTodo = jest.fn().mockImplementationOnce(() => {
+        function setupMock(value: any) {
+          api.toggleTodo = jest.fn().mockImplementationOnce(() => {
             return Promise.resolve(value)
           })
         }
@@ -100,7 +88,7 @@ jest.mock('../../api/service', () => {
         expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
 
         // toggle completed to true
-        setupMock(api, mockTodosAfterToggle)
+        setupMock(mockTodosAfterToggle)
         toggleCheck(wrapper, TEST_ID.toggleCheck)
         expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
         await callSetImmediate()
@@ -108,7 +96,7 @@ jest.mock('../../api/service', () => {
         expect(getElement(wrapper, TEST_ID.toggleCheck)).toBeChecked()
 
         // toggle completed back to false
-        setupMock(api, mockTodosAfterSecondToggle)
+        setupMock(mockTodosAfterSecondToggle)
         toggleCheck(wrapper, TEST_ID.toggleCheck)
         expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
         await callSetImmediate()

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { ACTION, useAsyncTodos2 as useAsyncTodos } from './hooks/useAsyncTodos'
+import useAsyncTodos, { ACTION } from './hooks/useAsyncTodos'
 import * as Widget from './components/Common'
 import { TEST_ID } from './components/Common'
 
@@ -39,7 +39,9 @@ const TodosContext = React.createContext({ todos: [], isLoading: false })
 const ActionContext = React.createContext({ dispatch: asyncNoop })
 
 const WithContextAsyncReducer = () => {
-  const { todos, isLoading, dispatch } = useAsyncTodos()
+  const { todos, isLoading, dispatch } = useAsyncTodos(
+    'WithContextAsyncReducer'
+  )
 
   return (
     <ActionContext.Provider value={{ dispatch }}>

@@ -3,7 +3,6 @@ async function stall(stallTime = 1000) {
 }
 
 const APP_ID = 'TEST_SAMPLES'
-export const FETCHED_COUNTER = 5
 export default class counterService {
   static COUNTER_ID = 'counterId'
   static getId(storeId: string) {
