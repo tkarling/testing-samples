@@ -4,7 +4,8 @@ import {
   callSetImmediate,
   getElement,
   getText,
-  click
+  click,
+  expectTexts
 } from '../../testHelpers.e'
 
 import WithAsyncState from './WithAsyncState'
@@ -17,10 +18,9 @@ jest.mock('../../api/counterService', () => ({
   setCounter: jest.fn((storeId, counter) => Promise.resolve(counter))
 }))
 
-const containerId = 'container'
 const counterId = 'counter'
 const waitCounterValue2 = async (wrapper: any, expectedValue: number) => {
-  expect(getText(wrapper, containerId)).toContain('Spinning')
+  expectTexts(wrapper, ['Spinning'])
 
   await callSetImmediate()
   wrapper.update()
@@ -42,7 +42,7 @@ const waitCounterValue2 = async (wrapper: any, expectedValue: number) => {
       it('renders Spinning before fetch', () => {
         expect.assertions(2)
         const wrapper = setup()
-        expect(getText(wrapper, containerId)).toContain('Spinning')
+        expectTexts(wrapper, ['Spinning'])
         expect(getElement(wrapper, counterId)).not.toExist()
       })
 

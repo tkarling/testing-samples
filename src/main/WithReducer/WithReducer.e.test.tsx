@@ -1,6 +1,11 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getElement, getText, click, toggleCheck } from '../../testHelpers.e'
+import {
+  getElement,
+  click,
+  toggleCheck,
+  expectTexts
+} from '../../testHelpers.e'
 import { TEXT, TEST_ID } from './components/Common'
 import WithReducer from './WithReducer'
 
@@ -11,18 +16,18 @@ describe('WithState', () => {
     wrapper = setup()
   })
   it('renders initial value', () => {
-    expect(getText(wrapper, TEST_ID.container)).toContain(TEXT.noItems)
+    expectTexts(wrapper, [TEXT.noItems])
   })
 
   it('can add Item', () => {
     click(wrapper, TEST_ID.addButton)
-    expect(getText(wrapper, TEST_ID.container)).toContain(TEXT.itemTitleBase)
+    expectTexts(wrapper, [TEXT.itemTitleBase])
   })
 
   describe('with one item created', () => {
     beforeEach(() => {
       click(wrapper, TEST_ID.addButton)
-      expect(getText(wrapper, TEST_ID.container)).toContain(TEXT.itemTitleBase)
+      expectTexts(wrapper, [TEXT.itemTitleBase])
     })
     it('can toggle checked status', () => {
       expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
@@ -40,7 +45,7 @@ describe('WithState', () => {
 
     it('can delete Item', () => {
       click(wrapper, TEST_ID.deleteButton)
-      expect(getText(wrapper, TEST_ID.container)).toContain(TEXT.noItems)
+      expectTexts(wrapper, [TEXT.noItems])
     })
   })
 })

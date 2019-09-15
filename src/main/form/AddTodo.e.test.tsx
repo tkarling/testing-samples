@@ -1,6 +1,12 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getText, setValue, submitForm, expectTexts } from '../../testHelpers.e'
+import {
+  getText,
+  setValue,
+  submitForm,
+  expectTexts,
+  callSetImmediate
+} from '../../testHelpers.e'
 import AddTodo, { TEST_ID } from './AddTodo'
 
 const TASK_REQUIRED_ERROR = 'Task required'
@@ -37,7 +43,7 @@ describe('Add Todo Form', () => {
     expectOnEmptyForm(wrapper)
   })
 
-  it('can submit Form succesfully', done => {
+  it('can submit Form succesfully', async () => {
     expect.assertions(4 + 2 + 6)
 
     setValue(wrapper, 'task', TASK)
@@ -45,44 +51,38 @@ describe('Add Todo Form', () => {
     expectOnFilledInForm(wrapper, [TASK, CATEGORY])
 
     submitForm(wrapper)
-    setImmediate(() => {
-      wrapper.update()
-      expectOnEmptyForm(wrapper)
-      done()
-    })
+    await callSetImmediate()
+    wrapper.update()
+    expectOnEmptyForm(wrapper)
   })
 
-  it('shows error for Missing task', done => {
+  it('shows error for Missing task', async () => {
     expect.assertions(4 + 1 + 4 + 1)
 
     setValue(wrapper, 'category', CATEGORY)
     expectOnFilledInForm(wrapper, [CATEGORY])
 
     submitForm(wrapper)
-    setImmediate(() => {
-      wrapper.update()
-      expectOnFormWithError(wrapper, TASK_REQUIRED_ERROR)
-      done()
-    })
+    await callSetImmediate()
+    wrapper.update()
+    expectOnFormWithError(wrapper, TASK_REQUIRED_ERROR)
   })
 
-  it('removes error after new input', done => {
+  it('removes error after new input', async () => {
     expect.assertions(4 + 1 + 5 + 4 + 2 + 1)
 
     setValue(wrapper, 'category', CATEGORY)
     expectOnFilledInForm(wrapper, [CATEGORY])
 
     submitForm(wrapper)
-    setImmediate(() => {
-      wrapper.update()
-      expectOnFormWithError(wrapper, TASK_REQUIRED_ERROR)
+    await callSetImmediate()
+    wrapper.update()
+    expectOnFormWithError(wrapper, TASK_REQUIRED_ERROR)
 
-      setValue(wrapper, 'task', TASK)
-      expectOnFilledInForm(wrapper, [TASK, CATEGORY])
-      expect(getText(wrapper, TEST_ID.container)).not.toContain(
-        TASK_REQUIRED_ERROR
-      )
-      done()
-    })
+    setValue(wrapper, 'task', TASK)
+    expectOnFilledInForm(wrapper, [TASK, CATEGORY])
+    expect(getText(wrapper, TEST_ID.container)).not.toContain(
+      TASK_REQUIRED_ERROR
+    )
   })
 })

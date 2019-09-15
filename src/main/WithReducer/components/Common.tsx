@@ -2,6 +2,7 @@ import React from 'react'
 import styles from './Common.module.css'
 
 export const TEXT = {
+  spinning: 'Spinning',
   noItems: 'No Items',
   itemTitleBase: 'moi'
 }

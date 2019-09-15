@@ -3,7 +3,6 @@ import { mount } from 'enzyme'
 import {
   callSetImmediate,
   getElement,
-  getText,
   click,
   toggleCheck,
   expectTexts
@@ -49,14 +48,14 @@ jest.mock('../../api/todosService', () => ({
     it('renders Spinning before fetch', () => {
       expect.assertions(1)
       const wrapper = setup()
-      expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
+      expectTexts(wrapper, [TEXT.spinning])
     })
 
     describe('After initial Fetch', () => {
       let wrapper: any
       beforeEach(async () => {
         wrapper = setup()
-        expectTexts(wrapper, ['Spinning'])
+        expectTexts(wrapper, [TEXT.spinning])
         await callSetImmediate()
         wrapper.update()
         expectTexts(wrapper, mockTodosInitial.map(item => item.title))
@@ -70,7 +69,7 @@ jest.mock('../../api/todosService', () => ({
       it('can add Item', async () => {
         expect.assertions(2 + 1 + 2)
         click(wrapper, TEST_ID.addButton)
-        expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
+        expectTexts(wrapper, [TEXT.spinning])
 
         await callSetImmediate()
         wrapper.update()
@@ -90,7 +89,7 @@ jest.mock('../../api/todosService', () => ({
         // toggle completed to true
         setupMock(mockTodosAfterToggle)
         toggleCheck(wrapper, TEST_ID.toggleCheck)
-        expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
+        expectTexts(wrapper, [TEXT.spinning])
         await callSetImmediate()
         wrapper.update()
         expect(getElement(wrapper, TEST_ID.toggleCheck)).toBeChecked()
@@ -98,7 +97,7 @@ jest.mock('../../api/todosService', () => ({
         // toggle completed back to false
         setupMock(mockTodosAfterSecondToggle)
         toggleCheck(wrapper, TEST_ID.toggleCheck)
-        expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
+        expectTexts(wrapper, [TEXT.spinning])
         await callSetImmediate()
         wrapper.update()
         expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
@@ -108,10 +107,10 @@ jest.mock('../../api/todosService', () => ({
         expect.assertions(2 + 2)
 
         click(wrapper, TEST_ID.deleteButton)
-        expect(getText(wrapper, TEST_ID.container)).toContain('Spinning')
+        expectTexts(wrapper, [TEXT.spinning])
         await callSetImmediate()
         wrapper.update()
-        expect(getText(wrapper, TEST_ID.container)).toContain(TEXT.noItems)
+        expectTexts(wrapper, [TEXT.noItems])
       })
     })
   })

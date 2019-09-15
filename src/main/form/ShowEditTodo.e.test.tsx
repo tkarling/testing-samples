@@ -1,6 +1,12 @@
 import React from 'react'
 import { mount } from 'enzyme'
-import { getText, setValue, submitForm, expectTexts } from '../../testHelpers.e'
+import {
+  getText,
+  setValue,
+  submitForm,
+  expectTexts,
+  callSetImmediate
+} from '../../testHelpers.e'
 import ShowEditTodo, { TEST_ID, SAMPLE } from './ShowEditTodo'
 
 const TASK_REQUIRED_ERROR = 'Task required'
@@ -54,7 +60,7 @@ describe('Show/Edit Form', () => {
     expectOnFilledInForm(wrapper, [SAMPLE.task, SAMPLE.category])
   })
 
-  it('can submit Form succesfully', done => {
+  it('can submit Form succesfully', async () => {
     expect.assertions(4 + 4 + 4)
 
     clickEdit(wrapper)
@@ -69,14 +75,12 @@ describe('Show/Edit Form', () => {
     expectOnFilledInForm(wrapper, [UPDATED.task, UPDATED.category])
 
     clickEdit(wrapper)
-    setImmediate(() => {
-      wrapper.update()
-      expectOnView(wrapper, [UPDATED.task, UPDATED.category])
-      done()
-    })
+    await callSetImmediate()
+    wrapper.update()
+    expectOnView(wrapper, [UPDATED.task, UPDATED.category])
   })
 
-  it('shows error for Missing task', done => {
+  it('shows error for Missing task', async () => {
     expect.assertions(4 + 3 + 3)
 
     clickEdit(wrapper)
@@ -86,10 +90,8 @@ describe('Show/Edit Form', () => {
     expectOnFilledInForm(wrapper, [SAMPLE.category])
 
     clickEdit(wrapper)
-    setImmediate(() => {
-      wrapper.update()
-      expectOnFormWithError(wrapper, TASK_REQUIRED_ERROR)
-      done()
-    })
+    await callSetImmediate()
+    wrapper.update()
+    expectOnFormWithError(wrapper, TASK_REQUIRED_ERROR)
   })
 })
