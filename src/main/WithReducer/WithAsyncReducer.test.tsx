@@ -30,10 +30,10 @@ jest.mock('../../api/todosService', () => ({
 }))
 
 const expectTexts = async (
-  { getByTestId, getByText }: any,
+  { getByTestId, findByText }: any,
   texts: string[]
 ) => {
-  await waitForElement(() => getByText(texts[texts.length - 1]).textContent)
+  await findByText(texts[texts.length - 1])
   texts.forEach(async expectedText => {
     expect(getByTestId(TEST_ID.container)).toHaveTextContent(expectedText)
   })
@@ -56,12 +56,12 @@ const expectTexts = async (
 
     describe('After initial Fetch', () => {
       let getByTestId: any
-      let getByText: any
+      let findByText: any
       beforeEach(async () => {
-        ;({ getByTestId, getByText } = setup())
+        ;({ getByTestId, findByText } = setup())
         expect(getByTestId(TEST_ID.container)).toHaveTextContent('Spinning')
         await expectTexts(
-          { getByTestId, getByText },
+          { getByTestId, findByText },
           mockTodosInitial.map(item => item.title)
         )
       })
@@ -77,7 +77,7 @@ const expectTexts = async (
         expect(getByTestId(TEST_ID.container)).toHaveTextContent('Spinning')
 
         await expectTexts(
-          { getByTestId, getByText },
+          { getByTestId, findByText },
           mockTodosAfterAdd.map(item => item.title)
         )
       })
@@ -116,7 +116,7 @@ const expectTexts = async (
 
         fireEvent.click(getByTestId(TEST_ID.deleteButton))
         expect(getByTestId(TEST_ID.container)).toHaveTextContent('Spinning')
-        await expectTexts({ getByTestId, getByText }, [TEXT.noItems])
+        await expectTexts({ getByTestId, findByText }, [TEXT.noItems])
       })
     })
   })
