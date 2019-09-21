@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, waitForElement, fireEvent } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 import { TEXT, TEST_ID } from './components/Common'
 import WithAsyncReducer from './WithAsyncReducer'
 import WithContextAsyncReducer from './WithContextAsyncReducerProvider'
@@ -20,8 +20,8 @@ const ADDED_TODO = {
 
 const mockTodosInitial = [TODO]
 const mockTodosAfterAdd = [ADDED_TODO, TODO]
-const mockTodosAfterToggle = [{ ...TODO, completed: true }]
-const mockTodosAfterSecondToggle = [{ ...TODO, completed: false }]
+const mockTodosAfterToTrue = [{ ...TODO, completed: true }]
+const mockTodosAfterToFalse = [{ ...TODO, completed: false }]
 jest.mock('../../api/todosService', () => ({
   getTodos: jest.fn(() => Promise.resolve(mockTodosInitial)),
   addTodo: jest.fn(() => Promise.resolve(mockTodosAfterAdd)),
@@ -29,14 +29,14 @@ jest.mock('../../api/todosService', () => ({
   deleteTodo: jest.fn(() => Promise.resolve([]))
 }))
 
-const expectTexts = async (
+const expectAsyncTexts = async (
   { getByTestId, findByText }: any,
   texts: string[]
 ) => {
-  await findByText(texts[texts.length - 1])
-  texts.forEach(async expectedText => {
-    expect(getByTestId(TEST_ID.container)).toHaveTextContent(expectedText)
-  })
+  expect(getByTestId(TEST_ID.container)).toHaveTextContent(TEXT.spinning)
+  for (const text of texts) {
+    expect(await findByText(text)).toBeDefined()
+  }
 }
 ;['WithAsyncReducer', 'WithContextAsyncReducer'].forEach(componentName => {
   const setup = () =>
@@ -48,19 +48,19 @@ const expectTexts = async (
       )
     )
   describe(componentName, () => {
-    it('renders Spinning before fetch', () => {
+    it('renders spinning before fetch', () => {
       expect.assertions(1)
       const { getByTestId } = setup()
-      expect(getByTestId(TEST_ID.container)).toHaveTextContent('Spinning')
+      expect(getByTestId(TEST_ID.container)).toHaveTextContent(TEXT.spinning)
     })
 
     describe('After initial Fetch', () => {
       let getByTestId: any
+      let findByTestId: any
       let findByText: any
       beforeEach(async () => {
-        ;({ getByTestId, findByText } = setup())
-        expect(getByTestId(TEST_ID.container)).toHaveTextContent('Spinning')
-        await expectTexts(
+        ;({ getByTestId, findByTestId, findByText } = setup())
+        await expectAsyncTexts(
           { getByTestId, findByText },
           mockTodosInitial.map(item => item.title)
         )
@@ -72,51 +72,54 @@ const expectTexts = async (
       })
 
       it('can add Item', async () => {
-        expect.assertions(2 + 1 + 2)
+        expect.assertions(2 + 3)
         fireEvent.click(getByTestId(TEST_ID.addButton))
-        expect(getByTestId(TEST_ID.container)).toHaveTextContent('Spinning')
-
-        await expectTexts(
+        await expectAsyncTexts(
           { getByTestId, findByText },
           mockTodosAfterAdd.map(item => item.title)
         )
       })
 
       it('can toggle checked status', async () => {
-        function setupMock(value: any) {
+        const setupMock = (value: any) => {
           api.toggleTodo = jest.fn().mockImplementationOnce(() => {
             return Promise.resolve(value)
           })
+        }
+        const toggleCheckboxAndExpectAsyncValue = async (
+          {
+            getByTestId,
+            findByTestId
+          }: { getByTestId: any; findByTestId: any },
+          toValue: boolean
+        ) => {
+          setupMock(toValue ? mockTodosAfterToTrue : mockTodosAfterToFalse)
+          fireEvent.click(getByTestId(TEST_ID.toggleCheck))
+          expect(getByTestId(TEST_ID.container)).toHaveTextContent(
+            TEXT.spinning
+          )
+          const checkboxAfterClick = await findByTestId(TEST_ID.toggleCheck)
+          expect(checkboxAfterClick.checked).toBe(toValue)
         }
 
         expect.assertions(2 + 1 + 2 + 2)
         expect(getByTestId(TEST_ID.toggleCheck).checked).toBe(false)
 
-        // toggle completed to true
-        setupMock(mockTodosAfterToggle)
-        fireEvent.click(getByTestId(TEST_ID.toggleCheck))
-        expect(getByTestId(TEST_ID.container)).toHaveTextContent('Spinning')
-        const checkedAfterClick = await waitForElement(() =>
-          getByTestId(TEST_ID.toggleCheck)
+        await toggleCheckboxAndExpectAsyncValue(
+          { getByTestId, findByTestId },
+          true
         )
-        expect(checkedAfterClick.checked).toBe(true)
-
-        // toggle completed back to false
-        setupMock(mockTodosAfterSecondToggle)
-        fireEvent.click(getByTestId(TEST_ID.toggleCheck))
-        expect(getByTestId(TEST_ID.container)).toHaveTextContent('Spinning')
-        const checkedAfterTwoClicks = await waitForElement(() =>
-          getByTestId(TEST_ID.toggleCheck)
+        await toggleCheckboxAndExpectAsyncValue(
+          { getByTestId, findByTestId },
+          true
         )
-        expect(checkedAfterTwoClicks.checked).toBe(false)
       })
 
       it('can delete Item', async () => {
-        expect.assertions(2 + 1 + 1)
+        expect.assertions(2 + 2)
 
         fireEvent.click(getByTestId(TEST_ID.deleteButton))
-        expect(getByTestId(TEST_ID.container)).toHaveTextContent('Spinning')
-        await expectTexts({ getByTestId, findByText }, [TEXT.noItems])
+        await expectAsyncTexts({ getByTestId, findByText }, [TEXT.noItems])
       })
     })
   })

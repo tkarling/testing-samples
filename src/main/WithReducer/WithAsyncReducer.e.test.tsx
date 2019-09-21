@@ -27,14 +27,21 @@ const ADDED_TODO = {
 
 const mockTodosInitial = [TODO]
 const mockTodosAfterAdd = [ADDED_TODO, TODO]
-const mockTodosAfterToggle = [{ ...TODO, completed: true }]
-const mockTodosAfterSecondToggle = [{ ...TODO, completed: false }]
+const mockTodosAfterToTrue = [{ ...TODO, completed: true }]
+const mockTodosAfterToFalse = [{ ...TODO, completed: false }]
 jest.mock('../../api/todosService', () => ({
   getTodos: jest.fn(() => Promise.resolve(mockTodosInitial)),
   addTodo: jest.fn(() => Promise.resolve(mockTodosAfterAdd)),
   // toggleTodo: jest.fn(() => Promise.resolve(mockTodosAfterToggle)),
   deleteTodo: jest.fn(() => Promise.resolve([]))
 }))
+
+const expectAsyncTexts = async (wrapper: any, texts: string[]) => {
+  expectTexts(wrapper, [TEXT.spinning])
+  await callSetImmediate()
+  wrapper.update()
+  expectTexts(wrapper, texts)
+}
 ;['WithAsyncReducer', 'WithContextAsyncReducer'].forEach(componentName => {
   const setup = () =>
     mount(
@@ -55,10 +62,10 @@ jest.mock('../../api/todosService', () => ({
       let wrapper: any
       beforeEach(async () => {
         wrapper = setup()
-        expectTexts(wrapper, [TEXT.spinning])
-        await callSetImmediate()
-        wrapper.update()
-        expectTexts(wrapper, mockTodosInitial.map(item => item.title))
+        await expectAsyncTexts(
+          wrapper,
+          mockTodosInitial.map(item => item.title)
+        )
       })
 
       it('renders initial todos', () => {
@@ -67,50 +74,49 @@ jest.mock('../../api/todosService', () => ({
       })
 
       it('can add Item', async () => {
-        expect.assertions(2 + 1 + 2)
+        expect.assertions(2 + 3)
         click(wrapper, TEST_ID.addButton)
-        expectTexts(wrapper, [TEXT.spinning])
-
-        await callSetImmediate()
-        wrapper.update()
-        expectTexts(wrapper, mockTodosAfterAdd.map(item => item.title))
+        await expectAsyncTexts(
+          wrapper,
+          mockTodosAfterAdd.map(item => item.title)
+        )
       })
 
       it('can toggle checked status', async () => {
-        function setupMock(value: any) {
+        const setupMock = (value: any) => {
           api.toggleTodo = jest.fn().mockImplementationOnce(() => {
             return Promise.resolve(value)
           })
         }
+        const toggleCheckboxAndExpectAsyncValue = async (
+          wrapper: any,
+          toValue: boolean
+        ) => {
+          setupMock(toValue ? mockTodosAfterToTrue : mockTodosAfterToFalse)
+          toggleCheck(wrapper, TEST_ID.toggleCheck)
+          expectTexts(wrapper, [TEXT.spinning])
 
+          await callSetImmediate()
+          wrapper.update()
+          const cb = getElement(wrapper, TEST_ID.toggleCheck)
+          if (toValue) {
+            expect(cb).toBeChecked()
+          } else {
+            expect(cb).not.toBeChecked()
+          }
+        }
         expect.assertions(2 + 1 + 2 + 2)
         expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
 
-        // toggle completed to true
-        setupMock(mockTodosAfterToggle)
-        toggleCheck(wrapper, TEST_ID.toggleCheck)
-        expectTexts(wrapper, [TEXT.spinning])
-        await callSetImmediate()
-        wrapper.update()
-        expect(getElement(wrapper, TEST_ID.toggleCheck)).toBeChecked()
-
-        // toggle completed back to false
-        setupMock(mockTodosAfterSecondToggle)
-        toggleCheck(wrapper, TEST_ID.toggleCheck)
-        expectTexts(wrapper, [TEXT.spinning])
-        await callSetImmediate()
-        wrapper.update()
-        expect(getElement(wrapper, TEST_ID.toggleCheck)).not.toBeChecked()
+        await toggleCheckboxAndExpectAsyncValue(wrapper, true)
+        await toggleCheckboxAndExpectAsyncValue(wrapper, false)
       })
 
       it('can delete Item', async () => {
         expect.assertions(2 + 2)
 
         click(wrapper, TEST_ID.deleteButton)
-        expectTexts(wrapper, [TEXT.spinning])
-        await callSetImmediate()
-        wrapper.update()
-        expectTexts(wrapper, [TEXT.noItems])
+        await expectAsyncTexts(wrapper, [TEXT.noItems])
       })
     })
   })
