@@ -19,12 +19,11 @@ jest.mock('../../api/counterService', () => ({
 }))
 
 const counterId = 'counter'
-const waitCounterValue2 = async (wrapper: any, expectedValue: number) => {
+const expectAsyncValue = async (wrapper: any, expectedValue: number) => {
   expectTexts(wrapper, ['Spinning'])
-
   await callSetImmediate()
   wrapper.update()
-  expect(getText(wrapper, counterId)).toContain(expectedValue)
+  expectTexts(wrapper, [expectedValue + ''])
 }
 ;['WithAsyncState', 'WithContextAsyncState', 'WithRenderProp'].forEach(
   componentName => {
@@ -49,16 +48,16 @@ const waitCounterValue2 = async (wrapper: any, expectedValue: number) => {
       it('renders async counter', async () => {
         expect.assertions(2)
         const wrapper = setup()
-        await waitCounterValue2(wrapper, mockExpectedCounter)
+        await expectAsyncValue(wrapper, mockExpectedCounter)
       })
 
       it('can increment', async () => {
         expect.assertions(4)
         const wrapper = setup()
-        await waitCounterValue2(wrapper, mockExpectedCounter)
+        await expectAsyncValue(wrapper, mockExpectedCounter)
 
         click(wrapper, counterId)
-        await waitCounterValue2(wrapper, mockExpectedCounter + 1)
+        await expectAsyncValue(wrapper, mockExpectedCounter + 1)
       })
     })
   }

@@ -1,5 +1,5 @@
 import React from 'react'
-import { render, waitForElement, fireEvent } from '@testing-library/react'
+import { render, fireEvent } from '@testing-library/react'
 
 import WithAsyncState from './WithAsyncState'
 import WithContextAsyncState from './WithContextAsyncStateProvider'
@@ -11,14 +11,15 @@ jest.mock('../../api/counterService', () => ({
   setCounter: jest.fn((storeId, counter) => Promise.resolve(counter))
 }))
 
-const containerId = 'container'
-const counterId = 'counter'
-const waitCounterValue2 = async (getByTestId: any, expectedValue: number) => {
-  expect(getByTestId(containerId)).toHaveTextContent('Spinning...')
-  const counterText = await waitForElement(
-    () => getByTestId(counterId).textContent
-  )
-  expect(counterText).toContain(expectedValue)
+const containerTestId = 'container'
+const counterTestId = 'counter'
+const expectAsyncValue = async (
+  { getByTestId, findByTestId }: { getByTestId: any; findByTestId: any },
+  expectedValue: number
+) => {
+  expect(getByTestId(containerTestId)).toHaveTextContent('Spinning...')
+  const counter = await findByTestId(containerTestId)
+  expect(counter.textContent).toContain(expectedValue + '')
 }
 ;['WithAsyncState', 'WithContextAsyncState', 'WithRenderProp'].forEach(
   componentName => {
@@ -38,23 +39,32 @@ const waitCounterValue2 = async (getByTestId: any, expectedValue: number) => {
         it('renders Spinning before fetch', () => {
           expect.assertions(2)
           const { getByTestId, queryByTestId } = setup()
-          expect(getByTestId(containerId)).toHaveTextContent('Spinning...')
-          expect(queryByTestId(counterId)).toBeNull()
+          expect(getByTestId(containerTestId)).toHaveTextContent('Spinning...')
+          expect(queryByTestId(counterTestId)).toBeNull()
         })
 
         it('renders async counter', async () => {
           expect.assertions(2)
-          const { getByTestId } = setup()
-          await waitCounterValue2(getByTestId, mockExpectedCounter)
+          const { getByTestId, findByTestId } = setup()
+          await expectAsyncValue(
+            { getByTestId, findByTestId },
+            mockExpectedCounter
+          )
         })
 
         it('can increment', async () => {
           expect.assertions(4)
-          const { getByTestId } = setup()
-          await waitCounterValue2(getByTestId, mockExpectedCounter)
+          const { getByTestId, findByTestId } = setup()
+          await expectAsyncValue(
+            { getByTestId, findByTestId },
+            mockExpectedCounter
+          )
 
-          fireEvent.click(getByTestId(counterId))
-          await waitCounterValue2(getByTestId, mockExpectedCounter + 1)
+          fireEvent.click(getByTestId(counterTestId))
+          await expectAsyncValue(
+            { getByTestId, findByTestId },
+            mockExpectedCounter + 1
+          )
         })
       })
     })
