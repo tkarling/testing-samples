@@ -1,9 +1,8 @@
 import React from 'react'
-import { shallow } from 'enzyme'
-import { getText, click } from '../../testHelpers.e'
+import { mount, getText, click } from '../../testHelpers.e'
 import WithState, { INITIAL_COUNTER } from './WithState'
 
-const setup = () => shallow(<WithState />)
+const setup = () => mount(<WithState />)
 describe('WithState', () => {
   const testId = 'counter'
 

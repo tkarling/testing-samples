@@ -29,19 +29,4 @@ export const submitForm = (wrapper: any) =>
 export const expectTexts = (wrapper: any, texts: string[]) =>
   texts.forEach(text => expect(wrapper.text()).toContain(text))
 
-export const expectItem = (
-  { id, title, completed }: Todo,
-  {
-    id: expectedId,
-    title: expectedTitle,
-    completed: expectedCompleted
-  }: Partial<Todo>
-) => {
-  if (expectedId) {
-    expect(id).toEqual(expectedId)
-  }
-  expect(title).toContain(expectedTitle)
-  if (expectedCompleted != undefined) {
-    expect(completed).toEqual(expectedCompleted)
-  }
-}
+export * from 'enzyme'

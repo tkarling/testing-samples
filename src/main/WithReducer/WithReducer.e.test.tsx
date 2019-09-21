@@ -1,6 +1,6 @@
 import React from 'react'
-import { mount } from 'enzyme'
 import {
+  mount,
   getElement,
   click,
   toggleCheck,
