@@ -14,12 +14,13 @@ jest.mock('../../api/counterService', () => ({
 const containerTestId = 'container'
 const counterTestId = 'counter'
 const expectAsyncValue = async (
-  { getByTestId, findByTestId }: { getByTestId: any; findByTestId: any },
+  { getByTestId, findAllByText }: { getByTestId: any; findAllByText: any },
   expectedValue: number
 ) => {
   expect(getByTestId(containerTestId)).toHaveTextContent('Spinning...')
-  const counter = await findByTestId(containerTestId)
-  expect(counter.textContent).toContain(expectedValue + '')
+  expect(
+    (await findAllByText(expectedValue + '', { exact: false })).length
+  ).toBeGreaterThan(0) // WithContextAsyncState has 2 copies of the counter
 }
 ;['WithAsyncState', 'WithContextAsyncState', 'WithRenderProp'].forEach(
   componentName => {
@@ -45,24 +46,24 @@ const expectAsyncValue = async (
 
         it('renders async counter', async () => {
           expect.assertions(2)
-          const { getByTestId, findByTestId } = setup()
+          const { getByTestId, findAllByText } = setup()
           await expectAsyncValue(
-            { getByTestId, findByTestId },
+            { getByTestId, findAllByText },
             mockExpectedCounter
           )
         })
 
         it('can increment', async () => {
           expect.assertions(4)
-          const { getByTestId, findByTestId } = setup()
+          const { getByTestId, findAllByText } = setup()
           await expectAsyncValue(
-            { getByTestId, findByTestId },
+            { getByTestId, findAllByText },
             mockExpectedCounter
           )
 
           fireEvent.click(getByTestId(counterTestId))
           await expectAsyncValue(
-            { getByTestId, findByTestId },
+            { getByTestId, findAllByText },
             mockExpectedCounter + 1
           )
         })
