@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState, Suspense } from 'react'
 import './App.css'
+import { UserContext } from './firebase/UserContext'
 
 import Basic from './main/Basic'
 
@@ -18,6 +19,8 @@ import ShowEditTodo from './main/form/ShowEditTodo'
 import LoginOrRegisterForm from './examples/loginForm/LoginOrRegister'
 
 import Experiment from './experiments/temp/Experiment'
+
+const FbMain = React.lazy(() => import('./firebase/FbMain'))
 
 const Row = ({ children }: { children: any }) => (
   <div className="AppRow">{children}</div>
@@ -62,13 +65,19 @@ const Main: React.FC = () => (
 
 const App: React.FC = () => {
   const [page, setPage] = useState('main')
+  const [user, setUser] = useState(null)
+
   const onClick = () => {
     setPage(
       page === 'main'
         ? 'examples'
         : page === 'examples'
         ? 'experiments'
-        : 'main'
+        : // uncomment following if you want to use firebase page
+          // page === 'experiments'
+          // ? 'fb'
+          // :
+          'main'
     )
   }
 
@@ -77,10 +86,14 @@ const App: React.FC = () => {
       <Row>
         <button onClick={onClick}>Next</button>
       </Row>
-
       {page === 'main' && <Main />}
       {page === 'examples' && <Examples />}
       {page === 'experiments' && <Experiments />}
+      <Suspense fallback={<div>Loading...</div>}>
+        <UserContext.Provider value={{ user, setUser: setUser as any }}>
+          {page === 'fb' && <FbMain />}
+        </UserContext.Provider>
+      </Suspense>
     </div>
   )
 }
