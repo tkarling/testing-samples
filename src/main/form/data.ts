@@ -19,7 +19,6 @@ export const FIELDS = {
   },
   completed: {
     id: 'completed',
-    label: 'Completed',
     type: 'checkbox'
   }
 }

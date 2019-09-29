@@ -36,6 +36,7 @@ const ShowEditTodo = () => {
       completed: false
     }
   })
+  const noLabel = { label: '' }
 
   return (
     <div data-testid={TEST_ID.container}>
@@ -47,24 +48,25 @@ const ShowEditTodo = () => {
         <FormRow>
           <FormField
             {...FIELDS.completed}
+            {...noLabel}
             value={inputs.completed}
             onChange={onToggle}
-            showLabel={false}
             editing={true}
           />
           <FormColumn>
             <FormField
               {...FIELDS.task}
+              {...noLabel}
               value={inputs.task}
               onChange={onChange}
-              showLabel={false}
               editing={editing}
+              lineThrough={inputs.completed}
             />
             <FormField
               {...FIELDS.category}
+              {...noLabel}
               value={inputs.category}
               onChange={onChange}
-              showLabel={false}
               editing={editing}
             />
           </FormColumn>

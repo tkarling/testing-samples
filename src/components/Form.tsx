@@ -16,8 +16,8 @@ export const FormField = ({
   value = '', // a value always needed to make input controlled
   autoComplete,
   onChange,
-  showLabel = true,
-  editing = true
+  editing = true,
+  lineThrough = false
 }: {
   id: string
   label?: string
@@ -27,26 +27,42 @@ export const FormField = ({
   value?: string
   autoComplete?: string
   onChange: Function
-  showLabel?: boolean
   editing?: boolean
-}) => (
-  <div className={styles.FormField}>
-    {showLabel && <label>{label || id}:</label>}
-    {editing && (
-      <input
-        data-testid={id}
-        style={showLabel ? { minWidth: '60%' } : { minWidth: '100%' }}
-        name={name || id}
-        type={type}
-        value={value}
-        onChange={onChange as any}
-        placeholder={placeholder || label || id}
-        autoComplete={autoComplete}
-      />
-    )}
-    {!editing && <div>{value}</div>}
-  </div>
-)
+  lineThrough?: boolean
+}) => {
+  const minWidth = label ? '60%' : '100%'
+  const baseStyle = { height: 16, fontSize: 16, textAlign: 'start' as any }
+  const decoration = lineThrough ? { textDecoration: 'line-through' } : {}
+  return (
+    <div className={styles.FormField}>
+      {label && <label style={{ ...baseStyle }}>{label}:</label>}
+      {editing && (
+        <input
+          data-testid={id}
+          style={{ ...baseStyle, minWidth }}
+          name={name || id}
+          type={type}
+          value={value}
+          onChange={onChange as any}
+          placeholder={placeholder || label || id}
+          autoComplete={autoComplete}
+        />
+      )}
+      {!editing && (
+        <div
+          style={{
+            ...baseStyle,
+            paddingLeft: 3,
+            height: baseStyle.height + 6,
+            ...decoration
+          }}
+        >
+          {value}
+        </div>
+      )}
+    </div>
+  )
+}
 
 export const FormRow = ({ children }: { children: any }) => (
   <div className={styles.FormRow}>{children}</div>
