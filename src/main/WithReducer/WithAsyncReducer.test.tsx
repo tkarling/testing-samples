@@ -3,31 +3,15 @@ import { render, fireEvent } from '@testing-library/react'
 import { TEXT, TEST_ID } from './components/Common'
 import WithAsyncReducer from './WithAsyncReducer'
 import WithContextAsyncReducer from './WithContextAsyncReducerProvider'
+
 import api from '../../api/todosService'
-
-const TITLE = 'moi'
-const TITLE2 = 'joo'
-const TODO = {
-  id: '1',
-  title: TITLE,
-  completed: false
-}
-const ADDED_TODO = {
-  id: '3',
-  title: TITLE2,
-  completed: false
-}
-
-const mockTodosInitial = [TODO]
-const mockTodosAfterAdd = [ADDED_TODO, TODO]
-const mockTodosAfterToTrue = [{ ...TODO, completed: true }]
-const mockTodosAfterToFalse = [{ ...TODO, completed: false }]
-jest.mock('../../api/todosService', () => ({
-  getTodos: jest.fn(() => Promise.resolve(mockTodosInitial)),
-  addTodo: jest.fn(() => Promise.resolve(mockTodosAfterAdd)),
-  // toggleTodo: jest.fn(() => Promise.resolve(mockTodosAfterSecondToggle)),
-  deleteTodo: jest.fn(() => Promise.resolve([]))
-}))
+import {
+  mockTodosInitial,
+  mockTodosAfterAdd,
+  mockTodosAfterToTrue,
+  mockTodosAfterToFalse
+} from '../../api/__mocks__/todosService'
+jest.mock('../../api/todosService')
 
 const expectAsyncTexts = async (
   { getByTestId, findByText }: any,

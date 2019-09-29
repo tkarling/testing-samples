@@ -3,7 +3,6 @@ import {
   mount,
   callSetImmediate,
   getElement,
-  getText,
   click,
   expectTexts
 } from '../../testHelpers.e'
@@ -12,11 +11,8 @@ import WithAsyncState from './WithAsyncState'
 import WithContextAsyncState from './WithContextAsyncStateProvider'
 import WithRenderProp from './WithRenderProp'
 
-const mockExpectedCounter = 6
-jest.mock('../../api/counterService', () => ({
-  getCounter: jest.fn(storeId => Promise.resolve(mockExpectedCounter)),
-  setCounter: jest.fn((storeId, counter) => Promise.resolve(counter))
-}))
+import { mockExpectedCounter } from '../../api/__mocks__/counterService'
+jest.mock('../../api/counterService')
 
 const counterId = 'counter'
 const expectAsyncValue = async (wrapper: any, expectedValue: number) => {
