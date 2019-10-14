@@ -35,9 +35,14 @@ export const FormField = ({
   const decoration = lineThrough ? { textDecoration: 'line-through' } : {}
   return (
     <div className={styles.FormField}>
-      {label && <label style={{ ...baseStyle }}>{label}:</label>}
+      {label && (
+        <label htmlFor={id} style={{ ...baseStyle }}>
+          {label}:
+        </label>
+      )}
       {editing && (
         <input
+          id={id}
           data-testid={id}
           style={{ ...baseStyle, minWidth }}
           name={name || id}
