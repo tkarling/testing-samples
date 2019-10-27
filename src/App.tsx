@@ -18,7 +18,7 @@ import ShowEditTodo from './main/form/ShowEditTodo'
 
 import LoginOrRegisterForm from './examples/loginForm/LoginOrRegister'
 
-import Experiment from './experiments/temp/Experiment'
+import Experiment from './experiments/apiHookExperiments/ApiHookExperiments'
 
 const FbMain = React.lazy(() => import('./firebase/FbMain'))
 
