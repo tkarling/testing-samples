@@ -17,7 +17,7 @@ const Title = ({ children }: { children: string }) => (
 
 const ShowList = ({ config }: { config: Config }) => {
   const [result, { loading = false, error = '' }] = useFetch(config)
-  const items = (result && (result as any).results) || config.initial
+  const items = (result && (result as any).results) || config.initial || []
 
   return (
     <ShowFetched error={error} loading={loading}>
@@ -30,12 +30,14 @@ const ShowList = ({ config }: { config: Config }) => {
 }
 
 const ShowCumulativeList = ({ config }: { config: Config }) => {
-  const [items, { nextItems }, { loading, error }] = useCumulativeFetch(config)
+  const [items = [], { nextItems }, { loading, error }] = useCumulativeFetch(
+    config
+  )
 
   return (
     <ShowFetched error={error} loading={loading}>
       <div>
-        <button onClick={() => nextItems()} style={{ marginRight: 8 }}>
+        <button onClick={nextItems} style={{ marginRight: 8 }}>
           next
         </button>
         <span>
@@ -60,32 +62,30 @@ const ShowItem = ({ config }: { config: Config }) => {
   )
 }
 
-const config15 = {
+const configPokemons15 = {
   name: 'List Pokemon 1-5',
-  path: '/api/v2/pokemon',
-  query: '/?limit=5&offset=5',
-  initial: []
+  path: '/api/v2/pokemon'
 }
-const configI15 = {
+const configItems15 = {
   name: 'List Items 1-5',
-  path: '/api/v2/item',
-  query: '/?limit=5&offset=5',
-  initial: []
+  path: '/api/v2/item'
 }
-const configP1 = { name: 'Pokemon 1', path: '/api/v2/pokemon/1', initial: null }
-const configCont = {
-  name: 'List Pokemon 1-5',
-  path: '/api/v2/pokemon',
-  query: '/?limit=5&offset=5',
-  initial: []
+const configPokemon1 = {
+  name: 'Pokemon 1',
+  path: '/api/v2/pokemon/1',
+  initial: null
+}
+const configPokemons5AtTime = {
+  name: 'List Pokemons 5 more at time',
+  path: '/api/v2/pokemon'
 }
 const Experiment = () => {
   return (
     <div>
-      <ShowList config={config15} />
-      <ShowList config={configI15} />
-      <ShowItem config={configP1} />
-      <ShowCumulativeList config={configCont} />
+      <ShowList config={configPokemons15} />
+      <ShowList config={configItems15} />
+      <ShowItem config={configPokemon1} />
+      <ShowCumulativeList config={configPokemons5AtTime} />
     </div>
   )
 }

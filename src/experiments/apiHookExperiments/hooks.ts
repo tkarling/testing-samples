@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react'
+import { any } from 'prop-types'
 
 export interface Config {
   name: string
@@ -6,14 +7,43 @@ export interface Config {
   path: string
   limit?: number
   query?: string
-  initial: any
+  initial?: any
+}
+
+const fetchMyResult = async ({
+  base = 'https://pokeapi.co',
+  path,
+  limit = 5,
+  offset = 0,
+  initial = [],
+  actions: { setLoading, setError }
+}: {
+  base?: string
+  path: string
+  limit?: number
+  offset?: number
+  initial?: any
+  actions: { setLoading: any; setError: any }
+}) => {
+  let result = initial
+  setLoading(true)
+  setError('')
+  try {
+    const query = `?limit=${limit}&offset=${offset}`
+    const response = await fetch(base + path + query)
+    result = await response.json()
+  } catch (error) {
+    console.error('error fetching', error)
+    setError(error.message)
+  }
+  setLoading(false)
+  return result
 }
 
 export const useFetch = ({
-  base = 'https://pokeapi.co',
+  base,
   path = '/api/v2/pokemon',
-  query = '',
-  initial = [] //
+  initial
 }: Config) => {
   const [result, setResult] = useState(() => initial)
   const [loading, setLoading] = useState(false)
@@ -21,61 +51,51 @@ export const useFetch = ({
 
   useEffect(() => {
     const fetchResult = async () => {
-      setLoading(true)
-      setError('')
-      try {
-        const response = await fetch(base + path + query)
-        const fetchedResult = await response.json()
-        setResult(fetchedResult)
-      } catch (error) {
-        console.error('error fetching', error)
-        setError(error.message)
-        setResult(() => initial)
-      }
-      setLoading(false)
+      const fetchedResult = await fetchMyResult({
+        base,
+        path,
+        initial,
+        actions: { setLoading, setError }
+      })
+      setResult(fetchedResult)
     }
     if (!loading && result === initial) {
       fetchResult()
     }
-  }, [base, initial, query, path, loading, result])
+  }, [base, initial, path, loading, result])
 
   return [result, { loading, error }]
 }
 
 export const useCumulativeFetch = ({
-  base = 'https://pokeapi.co',
+  base,
   path = '/api/v2/pokemon',
   limit = 5,
-  initial = []
+  initial
 }: Config) => {
-  const [items, setItems] = useState(() => initial)
+  const [items, setItems] = useState(() => initial || [])
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [offset, setOffset] = useState(0)
 
   const nextItems = useCallback(() => {
     const fetchResult = async () => {
-      setLoading(true)
-      setError('')
-      try {
-        const query = `?limit=${limit}&offset=${offset}`
-        const response = await fetch(base + path + query)
-        const fetchedResult: { results: any[] } = await response.json()
-        if (
-          fetchedResult &&
-          fetchedResult.results &&
-          fetchedResult.results.length
-        ) {
-          setItems((prev: any) => [...prev, ...fetchedResult.results])
-          setOffset(prev => prev + limit)
-        } else {
-          console.log('no items for', base + path + query)
-        }
-      } catch (error) {
-        console.error('error fetching', error)
-        setError(error.message)
+      const fetchedResult = await fetchMyResult({
+        base,
+        path,
+        limit,
+        offset,
+        initial,
+        actions: { setLoading, setError }
+      })
+      if (
+        fetchedResult &&
+        fetchedResult.results &&
+        fetchedResult.results.length
+      ) {
+        setItems((prev: any) => [...prev, ...fetchedResult.results])
+        setOffset(prev => prev + limit)
       }
-      setLoading(false)
     }
     if (!loading) {
       fetchResult()
