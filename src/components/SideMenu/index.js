@@ -7,10 +7,19 @@
 import React, { memo, useState } from 'react'
 import { useSpring, a } from 'react-spring'
 import { useMeasure, usePrevious } from './helpers'
-import { Global, Frame, Title, Content, toggle } from './styles'
+import {
+  Global,
+  Frame,
+  Title,
+  Content,
+  toggle,
+  Page,
+  Menu,
+  PageContent
+} from './styles'
 import * as Icons from './icons'
 
-const Tree = memo(({ children, name, style, defaultOpen = false }) => {
+const Tree = memo(({ children, name, style, defaultOpen = false, onClick }) => {
   const [isOpen, setOpen] = useState(defaultOpen)
   const previous = usePrevious(isOpen)
   const [bind, { height: viewHeight }] = useMeasure()
@@ -24,13 +33,19 @@ const Tree = memo(({ children, name, style, defaultOpen = false }) => {
   })
   const Icon =
     Icons[`${children ? (isOpen ? 'Minus' : 'Plus') : 'Close'}SquareO`]
+  const onSetOpen = value => {
+    setOpen(value)
+    onClick()
+  }
   return (
     <Frame>
       <Icon
-        style={{ ...toggle, opacity: children ? 1 : 0.3 }}
-        onClick={() => setOpen(!isOpen)}
+        style={{ ...toggle, display: children ? 'default' : 'none' }}
+        onClick={() => onSetOpen(!isOpen)}
       />
-      <Title style={style}>{name}</Title>
+      <Title style={style} onClick={() => onSetOpen(!isOpen)}>
+        {name}
+      </Title>
       <Content
         style={{
           opacity,
@@ -43,43 +58,47 @@ const Tree = memo(({ children, name, style, defaultOpen = false }) => {
   )
 })
 
-const App = () => (
-  <>
-    <Global />
-    <Tree name="main" defaultOpen>
-      <Tree name="hello" />
-      <Tree name="subtree with children">
-        <Tree name="hello" />
-        <Tree name="sub-subtree with children">
-          <Tree name="child 1" style={{ color: '#37ceff' }} />
-          <Tree name="child 2" style={{ color: '#37ceff' }} />
-          <Tree name="child 3" style={{ color: '#37ceff' }} />
-          <Tree name="custom content">
-            <div
-              style={{
-                position: 'relative',
-                width: '100%',
-                height: 200,
-                padding: 10
-              }}
-            >
-              <div
-                style={{
-                  width: '100%',
-                  height: '100%',
-                  background: 'black',
-                  borderRadius: 5
-                }}
-              />
-            </div>
-          </Tree>
-        </Tree>
-        <Tree name="hello" />
-      </Tree>
-      <Tree name="world" />
-      <Tree name={<span>🙀 something something</span>} />
-    </Tree>
-  </>
+const TreeWChildren = ({ name, kids, onClick }) => (
+  <Tree name={name} onClick={() => onClick(name)}>
+    {kids ? kids.map(kid => <TreeWChildren {...kid} onClick={onClick} />) : ''}
+  </Tree>
 )
 
-export default App
+const MENU = [
+  {
+    name: 'parent1',
+    kids: [{ name: 'child11' }, { name: 'child12' }, { name: 'child13' }]
+  },
+  {
+    name: 'parent2'
+  },
+  {
+    name: 'parent3',
+    kids: [
+      { name: 'child31' },
+      { name: 'child32', kids: [{ name: 'gchild321' }] }
+    ]
+  },
+  {
+    name: <span>🙀something something</span>
+  }
+]
+
+const SideMenu = () => {
+  const [page, setPage] = useState('parent1')
+  return (
+    <>
+      <Global />
+      <Page>
+        <Menu>
+          {MENU.map(item => (
+            <TreeWChildren {...item} onClick={setPage} />
+          ))}
+        </Menu>
+        <PageContent>{page}</PageContent>
+      </Page>
+    </>
+  )
+}
+
+export default SideMenu

@@ -12,7 +12,7 @@ const Global = createGlobalStyle`
     height: 100%;
     margin: 0;
     padding: 0;
-    background: #191b21;
+    background: lightyellow;
     overflow: hidden;
     font-family: 'Monospaced Number', 'Chinese Quote', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto,
       'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -34,8 +34,28 @@ const Global = createGlobalStyle`
     cursor: default;
   }
   #root {
-    padding: 30px;
+    /* padding: 30px; */
   }
+`
+
+export const Page = styled('div')`
+  display: flex;
+  height: 100%;
+`
+
+export const Menu = styled('div')`
+  display: flex;
+  flex-direction: column;
+  width: 250px;
+  background-color: lightblue;
+  padding: 10px;
+`
+
+export const PageContent = styled('div')`
+  display: flex;
+  flex: 1;
+  background-color: lightgray;
+  padding: 10px;
 `
 
 const Frame = styled('div')`
