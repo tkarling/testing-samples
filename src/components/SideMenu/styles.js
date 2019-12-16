@@ -47,14 +47,14 @@ export const Menu = styled('div')`
   display: flex;
   flex-direction: column;
   width: 250px;
-  background-color: lightblue;
+  background-color: steelblue;
   padding: 10px;
 `
 
 export const PageContent = styled('div')`
   display: flex;
   flex: 1;
-  background-color: lightgray;
+  background-color: whitesmoke;
   padding: 10px;
 `
 
